@@ -1,10 +1,11 @@
 const express = require('express');
 const cors = require('cors');
-// const bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 const newsletterRoute = require("./routes/newsletterRoutes");
 const blogRoute = require("./routes/blog");
 const contactRoute = require("./routes/contact");
 const employeeRoutes = require("./routes/employeeRoutes");
+const multer = require("multer");
 
 
 require('dotenv').config({path : "./.env"});
