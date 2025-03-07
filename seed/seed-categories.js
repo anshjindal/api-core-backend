@@ -19,20 +19,12 @@ const seedCategories = async () => {
             categories.add(slug);
         }
 
-        const generateLongDescription = (minLength = 200) => {
-            let description = "";
-            while (description.length < minLength) {
-                description += faker.lorem.sentence() + " ";
-            }
-            return description.trim();
-        };
-
         const categoryArray = Array.from(categories).map(slug => ({
             slug,
             translations: [{
                 language: "en",
                 name: slug.replace(/-/g, ' '),
-                description: generateLongDescription(MIN_DESCRIPTION_LENGTH),
+                description: faker.lorem.slug(MIN_DESCRIPTION_LENGTH),
             }]
         }));
 
