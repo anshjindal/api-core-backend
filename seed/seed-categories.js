@@ -4,9 +4,13 @@ const faker = require('@faker-js/faker').faker;
 const Category = require('../models/category');
 const connectToDB = require('../utils/database'); 
 
+require('dotenv').config({path : "./.env"});
+
+const MIN_DESCRIPTION_LENGTH = 200; 
+
 const seedCategories = async () => {
     try {
-        await connectToDB(); 
+        await connectToDB(process.env.MONGODB_NAME); 
 
         const categories = new Set();
         while (categories.size < 20) {
@@ -15,12 +19,20 @@ const seedCategories = async () => {
             categories.add(slug);
         }
 
+        const generateLongDescription = (minLength = 200) => {
+            let description = "";
+            while (description.length < minLength) {
+                description += faker.lorem.sentence() + " ";
+            }
+            return description.trim();
+        };
+
         const categoryArray = Array.from(categories).map(slug => ({
             slug,
             translations: [{
                 language: "en",
                 name: slug.replace(/-/g, ' '),
-                description: faker.lorem.sentence(),
+                description: generateLongDescription(MIN_DESCRIPTION_LENGTH),
             }]
         }));
 

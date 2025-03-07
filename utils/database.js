@@ -4,7 +4,6 @@ let connections = {};
 const connectToDB = async (dbName) => {
     mongoose.set('strictQuery', true);
 
-
     if (connections[dbName]) {
         console.log(`MongoDB Connection Ok. Connected to ${dbName}`);
         return connections[dbName]; // Return the existing connection
@@ -22,7 +21,9 @@ const connectToDB = async (dbName) => {
         console.log(`MongoDB connected to ${dbName}`);
 
     } catch (error) {
-        console.log(error);
+        console.error("Error connecting to the database", error);
+        process.exit(1);
+    } finally {
     }
 }
 
