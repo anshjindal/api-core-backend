@@ -1,58 +1,42 @@
-require("dotenv").config();
-const mongoose = require("mongoose");
-const { faker } = require("@faker-js/faker");
-const Category = require("../models/category");
-const connectToDB = require("../utils/database");
+require('dotenv').config();
+const mongoose = require('mongoose');
+const faker = require('@faker-js/faker').faker;
+const Category = require('../models/category');
+const connectToDB = require('../utils/database'); 
 
-// Generate random category data
-const generateCategories = (count) => {
-  const categories = [];
-  for (let i = 0; i < count; i++) {
-    const category = {
-      slug: faker.lorem.slug(), // Generate a unique slug
-      translations: [
-        {
-          language: "en", // English translation
-          name: faker.commerce.department(), // Random department name
-          description: faker.lorem.sentence(30), // Random description
-        },
-        {
-          language: "fr", // French translation
-          name: faker.commerce.department(), // Random department name
-          description: faker.lorem.sentence(30), // Random description
-        },
-      ],
-    };
-    categories.push(category);
-  }
-  return categories;
-};
-
-// Insert categories into the database
 const seedCategories = async () => {
-  try {
-    // Connect to the database
-    await connectToDB(process.env.MONGODB_NAME);
+    try {
+        await connectToDB(); 
 
-    const count = 10;
+        const categories = new Set();
+        while (categories.size < 20) {
+            const name = faker.commerce.department();
+            const slug = faker.helpers.slugify(name).toLowerCase();
+            categories.add(slug);
+        }
 
-    // Generate 20 categories
-    const categories = generateCategories(count);
+        const categoryArray = Array.from(categories).map(slug => ({
+            slug,
+            translations: [{
+                language: "en",
+                name: slug.replace(/-/g, ' '),
+                description: faker.lorem.sentence(),
+            }]
+        }));
 
-    // Insert categories into the database
-    await Category.insertMany(categories);
-    console.log(
-      `${count} categories have been successfully added to the database.`,
-    );
+        for (const category of categoryArray) {
+            const existingCategory = await Category.findOne({ slug: category.slug });
+            if (!existingCategory) {
+                await Category.create(category);
+            }
+        }
 
-    // Close the database connection
-    await mongoose.connection.close();
-    console.log("Database connection closed.");
-  } catch (error) {
-    console.error("Error seeding categories:", error);
-    process.exit(1);
-  }
+        console.log('Unique fake categories inserted successfully');
+    } catch (error) {
+        console.error('Error inserting fake categories:', error);
+    } finally {
+        mongoose.connection.close();
+    }
 };
 
-// Run the seed script
 seedCategories();
