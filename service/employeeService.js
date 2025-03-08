@@ -79,16 +79,9 @@ exports.createEmployee = async (employeeData, files) => {
 
     await sendMail(emailData.name, emailData.email, emailData.username,emailData.password, emailData.subject, emailData.message, emailData.type);
 
-    console.log("✅ Employee Created & Credentials Email Sent!");
-
-
     await session.commitTransaction();
     session.endSession();
 
-    
-
-
-    console.log("Employee & Addresses Created Successfully!");
     return {
       message: "Employee created successfully",
       empId,
@@ -198,7 +191,7 @@ exports.getEmployeeById = async (empId) => {
   try {
 
     const employeeData = await Employee.findOne({ empId: empId, status: "active" })
-      .populate("addresses").select("-password -createdAt -updatedAt -accountNumber -bankName -interacId -sin -taxCode -workPermitDetails -prDetails -citizenshipId  -transitNumber -institutionNumber  -__v");
+      .populate("addresses").select("-password -createdAt -updatedAt -__v");
     return employeeData;
   } catch (error) {
     console.error("Error Fetching Employees:", error.message);

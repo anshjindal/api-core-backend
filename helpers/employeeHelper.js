@@ -1,6 +1,8 @@
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const Department = require("../models/department");
+const Designation = require("../models/designation");
+
 const getEmployeeModel = () => require("../models/employee");
 
 
@@ -12,7 +14,7 @@ const generateEmpId = async () => {
     const lastIdNumber = parseInt(lastEmployee.empId.replace("EMPLOYEE", ""), 10);
     return `EMPLOYEE${(lastIdNumber + 1).toString().padStart(5, "0")}`;
   }
-  return "EMPLOYEE00001"; // Default first Employee ID
+  return "EMPLOYEE00001"; 
 };
 
 // Generating Unique Departmentid
@@ -22,8 +24,23 @@ const generateDeptId = async () => {
     const lastIdNumber = parseInt(lastDepartment.departmentId.replace("DEPT", ""), 10);
     return `DEPT${(lastIdNumber + 1).toString().padStart(3, "0")}`;
   }
-  return "DEPT001"; // Default first Department id
+  return "DEPT001"; 
 };
+
+
+// Generating Unique designation id
+const generateDesignationId = async () => {
+  const lastDesignation = await Designation.findOne().sort({ designationId: -1 }).exec();
+  if (lastDesignation && lastDesignation.designationId) {
+    const match = lastDesignation.designationId.match(/^DESGN(\d+)$/);
+    if (match) {
+      const lastIdNumber = parseInt(match[1], 10);
+      return `DESGN${(lastIdNumber + 1).toString().padStart(3, "0")}`;
+    }
+  }
+  return "DESGN001";
+};
+
 
 // Generate Random Secure Password for first time
 const generatePassword = (length = 12) => {
@@ -50,4 +67,5 @@ module.exports = {
   generatePassword,
   hashPassword,
   comparePassword,
+  generateDesignationId
 };
