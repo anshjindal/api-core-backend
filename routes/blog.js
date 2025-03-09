@@ -87,52 +87,39 @@ router.get('/:slug', async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    // Fetch blogs, including the timeToRead field and translations for title and shortDesc
-    const blogs = await blog.find(
-      {}, // No filter
-      {
-        slug: 1, 
-        imageUrl: 1, 
-        tags: 1, // Include the tags field
-        timeToRead: 1, // Include timeToRead
-        category: 1,
-        "translations.language": 1,
-        "translations.title": 1, 
-        "translations.shortDesc": 1 
-      } // Projection: select necessary fields
-    ).populate('categories'); // Populate the entire category object;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.perPage) || 12;
+    const search = req.query.search || "";
+    const skip = (page - 1) * limit;
 
-    // Check if no blogs are found
-    if (blogs.length === 0) {
-      return res.status(404).json({ error: "No blogs found." });
+    let searchQuery = {};
+    if (search) {
+      searchQuery["translations.title"] = { $regex: search, $options: "i" };
     }
 
-    // Map through the blog data to return the necessary details
-    const blogDetails = blogs.map(blogData => {
-      const { slug, imageUrl, tags, timeToRead, translations, categories } = blogData;
+    const totalBlogs = await blog.countDocuments(searchQuery);
+    const totalPages = Math.ceil(totalBlogs / limit);
 
-      // Extract only 'en' and 'fr' translations for title and shortDesc
-      const enTranslation = translations.find(t => t.language === 'en');
-      const frTranslation = translations.find(t => t.language === 'fr');
+    const blogs = await blog.find(searchQuery)
+      .select("slug imageUrl tags timeToRead translations")
+      .skip(skip)
+      .limit(limit);
 
-      return {
-        slug: slug,
-        imageUrl: imageUrl,
-        tags: tags || [], // Ensure tags is always an array
-        timeToRead: timeToRead, // Include timeToRead
-        title: {
-          en: enTranslation ? enTranslation.title : null,
-          fr: frTranslation ? frTranslation.title : null
-        },
-        shortDesc: {
-          en: enTranslation ? enTranslation.shortDesc : null,
-          fr: frTranslation ? frTranslation.shortDesc : null
-        },
-        categories: categories,
-      };
+    return res.status(200).json({
+      blogs: blogs.map(blogData => ({
+        slug: blogData.slug,
+        imageUrl: blogData.imageUrl || "https://via.placeholder.com/300",
+        tags: blogData.tags || [],
+        timeToRead: blogData.timeToRead || 0,
+        translations: blogData.translations.length > 0 ? blogData.translations : [{ language: "en", title: "No Title", shortDesc: "No description available" }]
+      })),
+      pagination: {
+        currentPage: page,
+        totalPages,
+        perPage: limit,
+        totalBlogs
+      },
     });
-
-    return res.status(200).json({ blogs: blogDetails });
 
   } catch (error) {
     return res.status(500).json({ error: error.message || "Server Error" });

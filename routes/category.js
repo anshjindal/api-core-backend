@@ -6,20 +6,24 @@ const Blog = require('../models/blog');
 
 // add a new category
 router.post("/", async (req, res) => {
+    console.log(req.body);
+    
     const {name, slug, description } = req.body;
 
     try{
         // Verify if the category already exist
         const existingCatgory = await Category.findOne({
-            $or: [{name}, {slug}]
+            $or: [{slug}]
         })
 
         if(existingCatgory){
-            res.status(400).json({
-                message: "A category with this same name or slug already exists.",
-                error: error.message
+            return res.status(400).json({
+                message: "A category with this same name or slug already exists."
             })
         }
+
+        console.log("category does not exist");
+        
 
         // const translations = await TranslationService.translateCategoryContent(req.body);
 
@@ -134,9 +138,13 @@ router.delete('/:id', async (req, res) => {
 // retrieve a specific category with your blogs
 router.get('/:slug', async (req, res) => {
     const slug = req.params.slug;
+    const page = parseInt(req.query.page) || 1; // Default to page 1
+    const limit = parseInt(req.query.perPage) || 12; // Default limit = 12 blogs per page
+    const search = req.query.search || ""; // Search query
+    const skip = (page - 1) * limit; // Calculate how many blogs to skip
 
     try {
-        // Trouver la catégorie par son slug
+        // Find the category by slug
         const category = await Category.findOne({ slug });
 
         if (!category) {
@@ -145,10 +153,22 @@ router.get('/:slug', async (req, res) => {
             });
         }
 
-        // Récupérer les blogs de cette catégorie
-        const blogs = await Blog.find({ category: category._id })
+          // 🔹 Build search criteria
+        let searchQuery = { category: category._id };
+
+        if (search) {
+            searchQuery["translations.title"] = { $regex: search, $options: "i" }; // Case-insensitive search in title
+        }
+
+        // 🔹 Get paginated blogs for this category
+        const totalBlogs = await Blog.countDocuments(searchQuery);
+        const totalPages = Math.ceil(totalBlogs / limit);
+        const blogs = await Blog.find(searchQuery)
             .populate('categories', 'name slug')
-            .select('slug imageUrl tags timeToRead translations');
+            .select('slug imageUrl tags timeToRead translations')
+            .skip(skip)
+            .limit(limit);
+
 
         return res.status(200).json({
             category: {
@@ -163,7 +183,14 @@ router.get('/:slug', async (req, res) => {
                 tags: blog.tags,
                 timeToRead: blog.timeToRead,
                 translations: blog.translations
-            }))
+            })),
+            pagination: {
+                currentPage: page,
+                totalPages,
+                perPage: limit,
+                totalBlogs
+            },
+           
         });
     } catch (error) {
         return res.status(500).json({
