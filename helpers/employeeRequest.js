@@ -1,10 +1,7 @@
 class EmployeeRequest {
   constructor(req) {
-    console.log(req)
-    // Extract file (profile image) if provided
     this.profileImage = req.file ? req.file.filename : null;
 
-    // Extract text fields from `req`
     this.firstName = req.firstName;
     this.middleName = req.middleName;
     this.lastName = req.lastName;
