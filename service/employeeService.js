@@ -6,9 +6,13 @@ const { uploadFile } = require("../middlewares/fileStorageMiddlware");
 const path = require("path");
 const fs = require("fs");
 const sendMail = require("../middlewares/mailSender");
+const Department = require("../models/department");
+const Designation = require("../models/designation");
 
 
-exports.createEmployee = async (employeeData, files) => {
+
+
+const createEmployee = async (employeeData, files) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -98,17 +102,22 @@ exports.createEmployee = async (employeeData, files) => {
 };
 
 // handles fetch employee details 
-exports.getAllEmployees = async () => {
+const getAllEmployees = async () => {
   try {
-    const employees = await Employee.find().populate("addresses");
-    return employees;
+    const employees = await Employee.find().populate("addresses").populate("roleRef", "roleName");
+    const employeesList = employees.map(emp => emp.toObject());
+    for(const emp of employeesList){
+      emp.departmentName= await getDepartmentName(emp.departmentId);
+      emp.designationname= await getDesignationTitle(emp.designations);
+    }
+    return employeesList;
   } catch (error) {
     console.error("Error Fetching Employees:", error.message);
     throw new Error("Failed to fetch employees");
   }
 };
 
-exports.updateEmployee = async (empId, updatedData, files) => {
+const updateEmployee = async (empId, updatedData, files) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -187,15 +196,35 @@ exports.updateEmployee = async (empId, updatedData, files) => {
 };
 
 //getting employee based on Id
-exports.getEmployeeById = async (empId) => {
+const getEmployeeById = async (empId) => {
   try {
 
     const employeeData = await Employee.findOne({ empId: empId, status: "active" })
-      .populate("addresses").select("-password -createdAt -updatedAt -__v");
-    return employeeData;
+      .populate("addresses").populate("roleRef", "roleName").select("-password -createdAt -updatedAt -__v");
+   
+  
+    const populatedEmpData = employeeData.toObject(); // Convert Mongoose doc to plain JS object
+    populatedEmpData.departmentName = await getDepartmentName(employeeData.departmentId);
+    populatedEmpData.designationName = await getDesignationTitle(employeeData.designations);
+    return populatedEmpData
+
   } catch (error) {
     console.error("Error Fetching Employees:", error.message);
     throw new Error("Failed to fetch employees");
   }
 }
 
+const getDepartmentName = async (departmentId) => {
+  if (!departmentId) return null;
+  const department = await Department.findOne({ departmentId }).select("departmentName");
+  return department ? department.departmentName : null;
+};
+
+
+const getDesignationTitle = async (designationId) => {
+  if (!designationId) return null;
+  const designation = await Designation.findOne({ designationId }).select("title");
+  return designation ? designation.title : null;
+};
+
+module.exports = { getDepartmentName, getDesignationTitle,getEmployeeById,createEmployee,getAllEmployees,updateEmployee};

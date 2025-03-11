@@ -10,9 +10,8 @@ const loginController = async (req, res) => {
     }
 
     const { empId, password } = req.body;
-    const { accessToken, refreshToken, sessionId, employee} = await login(empId, password, req);
-    console.log(employee);
-    const empBean = EmployeeResponse.fromEntity(employee);
+    const { accessToken, refreshToken, sessionId, tempEmployee} = await login(empId, password, req);
+    const empBean = EmployeeResponse.fromEntity(tempEmployee);
 
     //Setting the  cookies
     res.cookie("accessToken", accessToken, { httpOnly: true, secure: true, sameSite: "strict" });

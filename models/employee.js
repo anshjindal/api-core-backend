@@ -88,17 +88,17 @@ const EmployeeSchema = mongoose.Schema({
   },
   designations: {
     type: String,
-    ref: "designations",
+    ref: "Designation",
     required: true,
   },
   roleRef: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "roles",
+    ref: "Role",
     required: true,
   },
   departmentId: {
     type: String,
-    ref: "department",
+    ref: "Department",
     required: true,
   },
   employmentType: {
