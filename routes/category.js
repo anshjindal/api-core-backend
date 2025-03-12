@@ -173,7 +173,7 @@ router.get('/:slug', async (req, res) => {
 
 //TO TEST
 // retrieve a specific category with your blogs with pagination
-router.get('/blog', async (req, res) => {
+router.get('/blog/:slug', async (req, res) => {
     const slug = req.params.slug;
 
     try {
