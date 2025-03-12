@@ -107,6 +107,8 @@ router.get('/findByCategory/:CategoryId', async (req, res) => {
       const limitValue = parseInt(req.query.perPage) || 2;
       const page = parseInt(req.query.page) || 1;
       const skipValue = (page - 1) * limitValue;
+      const totalBlogs = await blog.countDocuments({ category : id });
+      const totalPages = Math.ceil(totalBlogs / limitValue);
 
       const blogs = await blog.find({ category: id })
           .limit(limitValue)
@@ -120,7 +122,13 @@ router.get('/findByCategory/:CategoryId', async (req, res) => {
               tags: blog.tags,
               timeToRead: blog.timeToRead,
               translations: blog.translations
-          }))
+          })),
+        pagination: {
+          currentPage: page, 
+          lastPage: totalPages, 
+          perPage: limitValue, 
+          totalBlogs: totalBlogs,
+        }
       });
 
   } catch (error) {
