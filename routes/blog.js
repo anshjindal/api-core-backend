@@ -99,6 +99,38 @@ router.get("/:slug", async (req, res) => {
   }
 });
 
+// retrieve blogs from a specific category with pagination
+router.get('/findByCategory/:CategoryId', async (req, res) => {
+  const id = req.params.CategoryId;
+
+  try {
+      const limitValue = parseInt(req.query.perPage) || 2;
+      const page = parseInt(req.query.page) || 1;
+      const skipValue = (page - 1) * limitValue;
+
+      const blogs = await blog.find({ category: id })
+          .limit(limitValue)
+          .skip(skipValue)
+          .select('slug imageUrl tags timeToRead translations');
+
+      return res.status(200).json({
+          blogs: blogs.map(blog => ({
+              slug: blog.slug,
+              imageUrl: blog.imageUrl,
+              tags: blog.tags,
+              timeToRead: blog.timeToRead,
+              translations: blog.translations
+          }))
+      });
+
+  } catch (error) {
+      return res.status(500).json({
+          error: error.message || "Server error"
+      });
+  }
+});
+
+
 router.get("/", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
