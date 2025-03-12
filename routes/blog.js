@@ -100,8 +100,9 @@ router.get("/:slug", async (req, res) => {
 });
 
 // retrieve blogs from a specific category with pagination
-router.get('/findByCategory/:CategoryId', async (req, res) => {
+router.get('/findByCategory/:CategoryId/:slug', async (req, res) => {
   const id = req.params.CategoryId;
+  const slug = req.params.slug;
 
   try {
       const limitValue = parseInt(req.query.perPage) || 2;
@@ -109,19 +110,27 @@ router.get('/findByCategory/:CategoryId', async (req, res) => {
       const skipValue = (page - 1) * limitValue;
       const totalBlogs = await blog.countDocuments({ category : id });
       const totalPages = Math.ceil(totalBlogs / limitValue);
-
+      
       const blogs = await blog.find({ category: id })
           .limit(limitValue)
           .skip(skipValue)
           .select('slug imageUrl tags timeToRead translations');
 
       return res.status(200).json({
-          blogs: blogs.map(blog => ({
+          blogs: slug ? blogs.filter((blog) => blog.slug === slug).map(blog => ({
+            slug: blog.slug,
+            imageUrl: blog.imageUrl,
+            tags: blog.tags,
+            timeToRead: blog.timeToRead,
+            translations: blog.translations,
+            categories: blog.categories
+        })) : blogs.map(blog => ({
               slug: blog.slug,
               imageUrl: blog.imageUrl,
               tags: blog.tags,
               timeToRead: blog.timeToRead,
-              translations: blog.translations
+              translations: blog.translations,
+              categories: blog.categories
           })),
         pagination: {
           currentPage: page, 
