@@ -152,6 +152,20 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET: Retrieve a single blog by slug
+// GET: Retrieve all blog for the specific category
+router.get('/findByCategory/:id', async(req, res) => {
+  const id = req.params.id;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.perPage) || 12;
+  const skip = (page - 1) * limit;
+  const totalBlogs = await blog.countDocuments({ categories: id });
+  const totalPages = Math.ceil(totalBlogs / limit);
+
+  //const blogs = await blog.find({ categories: { $elemMatch: { id: id } } });
+  const blogs = await blog.find({ categories: id }).select().skip(skip).limit(limit);
+
+    res.status(200).json(blogs);
+
+});
 
 module.exports = router;
