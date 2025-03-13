@@ -1,49 +1,58 @@
-const express = require('express');
-const cors = require('cors');
+const express = require("express");
+const cors = require("cors");
 // const bodyParser = require('body-parser');
 const newsletterRoute = require("./routes/newsletterRoutes");
 const blogRoute = require("./routes/blog");
 const contactRoute = require("./routes/contact");
 const employeeRoutes = require("./routes/employeeRoutes");
 
+require("dotenv").config({ path: "./.env" });
 
-require('dotenv').config({path : "./.env"});
-
-const connectToDB = require("./utils/database"); 
+const connectToDB = require("./utils/database");
 
 //new addon requires
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const authRoutes = require("./routes/authenticationRoutes");
+const leavesRoutes = require("./routes/leaves");
 
 const app = express();
 
 // Use CORS middleware to allow requests from your frontend
-app.use(cors({
-  origin: [process.env.WOUESSI_FRONTEND_URL, "https://dev.wouessi.com/en", "https://dev.wouessi.com", "https://www.wouessi.com/en", "https://www.wouessi.com", "https://www.wouessi.ca/en/", "https://www.wouessi.ca"], // Dynamically set the allowed CORS origin
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: [
+      process.env.WOUESSI_FRONTEND_URL,
+      "https://dev.wouessi.com/en",
+      "https://dev.wouessi.com",
+      "https://www.wouessi.com/en",
+      "https://www.wouessi.com",
+      "https://www.wouessi.ca/en/",
+      "https://www.wouessi.ca",
+    ], // Dynamically set the allowed CORS origin
+    credentials: true,
+  })
+);
 
 // Middleware
 app.use(express.json());
 
 // Add the newsletter route
-app.use('/api/newsletter', newsletterRoute);
-app.use('/api/blog', blogRoute);
-app.use('/api/contact', contactRoute);
+app.use("/api/newsletter", newsletterRoute);
+app.use("/api/blog", blogRoute);
+app.use("/api/contact", contactRoute);
+app.use("/api/leaves", leavesRoutes);
 
-//new 
+//new
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Routes
 app.use("/api/auth", authRoutes);
 
-
 // Employee Routes
 app.use("/api/employee", employeeRoutes);
-
 
 const dbName = "Wouessi";
 
@@ -57,12 +66,12 @@ connectToDB(dbName)
   });
 
 // Define your routes
-app.get('/', (req, res) => {
-  res.send('Welcome to Wouessi Back Office');
+app.get("/", (req, res) => {
+  res.send("Welcome to Wouessi Back Office");
 });
 
-app.get('/data', (req, res) => {
-  res.json({ message: 'Hello from the server!' });
+app.get("/data", (req, res) => {
+  res.json({ message: "Hello from the server!" });
 });
 
 // Start the server
@@ -70,6 +79,3 @@ const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
-
-
-
