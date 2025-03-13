@@ -105,7 +105,7 @@ router.get('/findByCategory/:CategoryId/:slug', async (req, res) => {
   const slug = req.params.slug;
 
   try {
-      const limitValue = parseInt(req.query.perPage) || 2;
+      const limitValue = parseInt(req.query.perPage) || 12;
       const page = parseInt(req.query.page) || 1;
       const skipValue = (page - 1) * limitValue;
       const totalBlogs = await blog.countDocuments({ category : id });

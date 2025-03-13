@@ -3,6 +3,7 @@ const router = express.Router();
 const Category = require('../models/category');
 const TranslationService = require("../utils/translate")
 const Blog = require('../models/blog');
+const category = require('../models/category');
 
 // add a new category
 router.post("/", async (req, res) => {
@@ -50,9 +51,24 @@ router.post("/", async (req, res) => {
 
 router.get("/", async (req, res) => {
     try{
-        const categories = await Category.find();
+        const limitValue = parseInt(req.query.perPage) || 12;
+        const page = parseInt(req.query.page) || 1;
+        const skipValue = (page - 1) * limitValue;
+        const totalCategories = await Category.countDocuments();
+        const totalPages = Math.ceil(totalCategories / limitValue);
+        const categories = await Category.find()
+                    .limit(limitValue)
+                    .skip(skipValue);
+
         return res.status(200).json({
-            categories
+            categories,
+            pagination: {
+                currentPage: page, 
+                lastPage: totalPages, 
+                perPage: limitValue, 
+                totalCategories: totalCategories,
+              }
+
         });
     }catch (error) {
         res.status(500).json({
@@ -144,10 +160,18 @@ router.get('/:slug', async (req, res) => {
             });
         }
 
+        const limitValue = parseInt(req.query.perPage) || 12;
+        const page = parseInt(req.query.page) || 1;
+        const skipValue = (page - 1) * limitValue;
+        const totalBlogs = await  Blog.countDocuments({ category : category._id });
+        const totalPages = Math.ceil(totalBlogs / limitValue);
+
         // Récupérer les blogs de cette catégorie
         const blogs = await Blog.find({ category: category._id })
             .populate('categories', 'name slug')
-            .select('slug imageUrl tags timeToRead translations');
+            .select('slug imageUrl tags timeToRead translations')
+            .limit(limitValue)
+            .skip(skipValue);
 
         return res.status(200).json({
             category: {
@@ -162,7 +186,13 @@ router.get('/:slug', async (req, res) => {
                 tags: blog.tags,
                 timeToRead: blog.timeToRead,
                 translations: blog.translations
-            }))
+            })),
+            pagination: {
+                currentPage: page, 
+                lastPage: totalPages, 
+                perPage: limitValue, 
+                totalBlogs: totalBlogs,
+              }
         });
     } catch (error) {
         return res.status(500).json({
