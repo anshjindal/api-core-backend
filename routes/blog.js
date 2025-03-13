@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const blog = require("../models/blog");
+const category = require("../models/category");
 const TranslationService = require("../utils/translate");
 
 router.post("/", async (req, res) => {
@@ -152,6 +153,77 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET: Retrieve a single blog by slug
+// GET: Retrieve a blog by category
+router.get("/category/:slug", async (req, res) => {
+  const slug = req.params.slug;
+
+  try {
+    const categoryItem = await category.findOne({ slug });
+
+    console.log(categoryItem);
+
+    if (!categoryItem) {
+      return res.status(404).json({
+        error: "Category not found",
+      });
+    }
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.perPage) || 12;
+    const search = req.query.search || "";
+    const skip = (page - 1) * limit;
+
+    let searchQuery = { categories: categoryItem._id };
+
+    if (search) {
+      searchQuery["translations.title"] = { $regex: search, $options: "i" };
+    }
+
+    const totalBlogs = await blog.countDocuments(searchQuery);
+    const totalPages = Math.ceil(totalBlogs / limit);
+
+    const blogs = await blog.find(searchQuery).select().skip(skip).limit(limit);
+
+    return res.status(200).json({
+      category: {
+        _id: categoryItem._id,
+        slug: categoryItem.slug,
+      },
+      blogs: blogs.map((blogData) => {
+        const { translations } = blogData;
+
+        // Extract only 'en' and 'fr' translations for title and shortDesc
+        const enTranslation = translations.find((t) => t.language === "en");
+        const frTranslation = translations.find((t) => t.language === "fr");
+
+        return {
+          slug: blogData.slug,
+          imageUrl: blogData.imageUrl || "https://via.placeholder.com/300",
+          tags: blogData.tags || [],
+          timeToRead: blogData.timeToRead || 0,
+          title: {
+            en: enTranslation ? enTranslation.title : null,
+            fr: frTranslation ? frTranslation.title : null,
+          },
+          shortDesc: {
+            en: enTranslation ? enTranslation.shortDesc : null,
+            fr: frTranslation ? frTranslation.shortDesc : null,
+          },
+          categories: blogData.categories,
+        };
+      }),
+      pagination: {
+        currentPage: page,
+        lastPage: totalPages,
+        perPage: limit,
+        totalBlogs,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message || "Server error",
+    });
+  }
+});
 
 module.exports = router;
