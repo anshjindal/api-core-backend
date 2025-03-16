@@ -19,8 +19,8 @@ const RoleSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['Active', 'Inactive'],
-    default: 'Active' 
+    enum: ['active', 'inactive'],
+    default: 'active' 
   },
   createdAt: {
     type: Date,

@@ -1,10 +1,17 @@
 const express = require('express');
 const cors = require('cors');
-// const bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 const newsletterRoute = require("./routes/newsletterRoutes");
 const blogRoute = require("./routes/blog");
 const contactRoute = require("./routes/contact");
 const employeeRoutes = require("./routes/employeeRoutes");
+const departmentRoutes=require("./routes/departmentRoutes")
+const designationRoutes=require("./routes/designationRoutes")
+
+const authRoutes = require("./routes/authenticationRoutes");
+const roleRoutes=require("./routes/roleRoutes");
+
+const multer = require("multer");
 
 
 require('dotenv').config({path : "./.env"});
@@ -15,7 +22,6 @@ const connectToDB = require("./utils/database");
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 const morgan = require("morgan");
-const authRoutes = require("./routes/authenticationRoutes");
 
 const app = express();
 
@@ -43,6 +49,9 @@ app.use("/api/auth", authRoutes);
 
 // Employee Routes
 app.use("/api/employee", employeeRoutes);
+app.use("/api/department",departmentRoutes);
+app.use("/api/role",roleRoutes);
+app.use("/api/designation",designationRoutes);
 
 
 const dbName = "Wouessi";
