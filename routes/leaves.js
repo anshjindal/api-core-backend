@@ -4,7 +4,7 @@ const leavesController = require("../controllers/leavesController");
 const verifySession = require("../middlewares/authenticationMiddleware");
 
 router.post("/:empId", verifySession, leavesController.saveLeave);
-router.put("/:empId", verifySession, leavesController.updateLeave);
+router.put("/:leaveId", verifySession, leavesController.updateLeave);
 router.get("/:empId", verifySession, leavesController.getAllLeaves);
 
 module.exports = router;

@@ -7,6 +7,11 @@ const leaves = new mongoose.Schema({
     required: true,
     ref: "Employee",
   },
+  leaveId: {
+    type: String,
+    unique: true,
+    trim: true,
+  },
 
   startDate: {
     type: Date,

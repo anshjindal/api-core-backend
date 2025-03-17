@@ -13,8 +13,8 @@ exports.saveLeave = async (req, res) => {
 
 exports.updateLeave = async (req, res) => {
   try {
-    const { empId } = req.params;
-    const updatedLeave = await leavesService.updateLeave(empId, req.body);
+    const { leaveId } = req.params;
+    const updatedLeave = await leavesService.updateLeave(leaveId, req.body);
 
     if (!updatedLeave) {
       return res.status(404).json({ message: "Leave not found" });
