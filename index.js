@@ -9,15 +9,13 @@ const employeeRoutes = require("./routes/employeeRoutes");
 require("dotenv").config({ path: "./.env" });
 
 const connectToDB = require("./utils/database");
-
+const app = express();
 //new addon requires
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const authRoutes = require("./routes/authenticationRoutes");
 const leavesRoutes = require("./routes/leaves");
-
-const app = express();
 
 // Use CORS middleware to allow requests from your frontend
 app.use(
@@ -42,7 +40,6 @@ app.use(express.json());
 app.use("/api/newsletter", newsletterRoute);
 app.use("/api/blog", blogRoute);
 app.use("/api/contact", contactRoute);
-app.use("/api/leaves", leavesRoutes);
 
 //new
 app.use(express.urlencoded({ extended: true }));
@@ -53,6 +50,7 @@ app.use("/api/auth", authRoutes);
 
 // Employee Routes
 app.use("/api/employee", employeeRoutes);
+app.use("/api/leaves", leavesRoutes);
 
 const dbName = "Wouessi";
 
