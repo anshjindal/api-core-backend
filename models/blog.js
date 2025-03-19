@@ -16,11 +16,6 @@ const blogSchema = new mongoose.Schema({
       shortDesc: { type: String, required: true },
     }
   ],
-  categories: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category',
-    required: true
-  }],
 }, {
   timestamps: true
 });
