@@ -21,7 +21,6 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 const morgan = require("morgan");
-const authRoutes = require("./routes/authenticationRoutes");
 const leavesRoutes = require("./routes/leaves");
 
 // Use CORS middleware to allow requests from your frontend
