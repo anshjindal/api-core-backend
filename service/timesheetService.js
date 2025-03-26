@@ -40,6 +40,7 @@ const getAllEmployeeTimesheets = async (empId) => {
     if (sessions.length === 0) {
       throw new Error(`Provided employee id ${empId}, does not exist`);
     }
+    //might return an empty array if no timesheets are found
     const employeeTimesheets = await TimesheetSchema.find({ empId });
     return {
       message: "Fetched employee timesheets sucessfully",

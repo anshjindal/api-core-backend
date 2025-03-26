@@ -18,7 +18,7 @@ const getEmployeeTimesheets = async (req, res) => {
   const { empId } = req.params;
   try {
     const response = await getAllEmployeeTimesheets(empId);
-    res.status(201).json(response);
+    res.status(200).json(response);
   } catch (error) {
     console.log(error.message);
     res.status(500).json({
