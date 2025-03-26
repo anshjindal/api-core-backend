@@ -22,7 +22,10 @@ const createNewTimesheet = async (timesheetData) => {
       hoursWorked,
     });
     const savedTimesheet = await newTimesheet.save();
-    return { message: "Created timesheet succesfully", savedTimesheet };
+    return {
+      message: "Created timesheet succesfully",
+      timesheetId: savedTimesheet._id,
+    };
   } catch (error) {
     console.log("Failed to create timesheet:" + error.message);
     throw new Error(error.message);
