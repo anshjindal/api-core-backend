@@ -1,4 +1,7 @@
-const { createNewTimesheet } = require("../service/timesheetService");
+const {
+  createNewTimesheet,
+  getAllEmployeeTimesheets,
+} = require("../service/timesheetService");
 
 const createTimesheet = async (req, res) => {
   try {
@@ -11,20 +14,20 @@ const createTimesheet = async (req, res) => {
       .json({ error: "Failed to create timesheet. " + error.message });
   }
 };
-const getEmployeeTimesheet = async (req, res) => {
+const getEmployeeTimesheets = async (req, res) => {
   const { empId } = req.params;
   try {
-    const response = "";
+    const response = await getAllEmployeeTimesheets(empId);
     res.status(201).json(response);
   } catch (error) {
     console.log(error.message);
     res.status(500).json({
-      error: `Failed to get timesheet for employee ${empId}. ` + error.message,
+      error: `Failed to get timesheets for employee ${empId}. ` + error.message,
     });
   }
 };
 
 module.exports = {
   createTimesheet,
-  getEmployeeTimesheet,
+  getEmployeeTimesheets,
 };
