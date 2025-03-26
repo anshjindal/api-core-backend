@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 
 const TimesheetSchema = new mongoose.Schema(
   {
+    empId: {
+      type: String,
+      required: [true, "Employee id is required"],
+      ref: "Employee",
+    },
     task: {
       type: String,
       required: [true, "Task done required"],
@@ -26,4 +31,4 @@ const TimesheetSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("TimesheetSchema", TimesheetSchema);
+module.exports = mongoose.model("timesheet", TimesheetSchema);
