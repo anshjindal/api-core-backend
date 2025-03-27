@@ -6,5 +6,6 @@ exports.getEmploymentStatus = (req, res) => {
         status: "Active",
       },
     });
-  };
+  }; // gets employment status
+  
   
