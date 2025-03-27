@@ -10,6 +10,7 @@ const designationRoutes=require("./routes/designationRoutes")
 
 const authRoutes = require("./routes/authenticationRoutes");
 const roleRoutes=require("./routes/roleRoutes");
+const employmentStatusRoutes = require("./routes/employmentStatusRoutes");
 
 const multer = require("multer");
 
@@ -63,6 +64,8 @@ app.use("/api/designation",designationRoutes);
 app.use("/api/leaves", leavesRoutes);
 
 app.use("/api/job-info", jobInfoRoutes);
+
+app.use("/api/employment-status", employmentStatusRoutes);
 
 const dbName = "Wouessi";
 
