@@ -3,7 +3,7 @@ require('dotenv').config({ path: '../.env' }); // Adjust the path if .env is in 
 
 // Define the admin email
 
-const sendMail = (name, email, phone, subject, message, type) => {
+const sendMail = (name: string, email: string, phone: string, subject: string, message: string, type: string) => {
 
     const transporter = nodemailer.createTransport({
         host: 'smtp.office365.com',

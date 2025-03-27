@@ -16,7 +16,7 @@ const RootQuery = new GraphQLObjectType({
     fields: {
         newsletters: {
             type: new GraphQLList(NewsletterType),
-            resolve(parent, args) {
+            resolve(parent:any, args: {email: any}) {
                 // Fetch all subscribers from MongoDB
                 return Newsletter.find();
             },
@@ -33,7 +33,7 @@ const Mutation = new GraphQLObjectType({
             args: {
                 email: { type: GraphQLString },
             },
-            async resolve(parent, args) {
+            async resolve(parent: any, args : {email : any}) {
                 // Create a new subscriber
                 const newSubscriber = new Newsletter({ email: args.email });
                 try {
