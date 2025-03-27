@@ -22,6 +22,7 @@ const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const leavesRoutes = require("./routes/leaves");
+const timesheetRouter = require("./routes/timesheetRoutes");
 
 // Use CORS middleware to allow requests from your frontend
 app.use(
@@ -60,6 +61,9 @@ app.use("/api/department",departmentRoutes);
 app.use("/api/role",roleRoutes);
 app.use("/api/designation",designationRoutes);
 app.use("/api/leaves", leavesRoutes);
+
+// Timesheet Routes
+app.use("/api/timesheet", timesheetRouter);
 
 const dbName = "Wouessi";
 
