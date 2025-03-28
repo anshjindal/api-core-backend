@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const CertificateSchema = new mongoose.Schema({
     name: {
@@ -21,6 +22,12 @@ const CertificateSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true
+    },
+    // Many-to-one connection to User
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     }
 });
 
