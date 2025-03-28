@@ -1,57 +1,68 @@
-const TimesheetSchema = require("../models/timesheet");
-const redisClient = require("../utils/redisConfig");
-const createNewTimesheet = async (timesheetData) => {
+// In your service file (timesheetService.js)
+const Timesheet = require('../models/timesheetModel');
+
+// Fetch all timesheets
+const getAllTimesheets = async () => {
   try {
-    const requiredFields = ["task", "hoursWorked", "date", "empId"];
-    for (const field of requiredFields) {
-      if (!timesheetData[field]) {
-        throw new Error(`Missing or Invalid entry for ${field} in timesheet`);
-      }
-    }
-    const { task, hoursWorked, date, empId } = timesheetData;
-    const sessions = await redisClient.keys(`session:${empId}:*`);
-
-    if (sessions.length === 0) {
-      throw new Error(`Provided employee id ${empId}, does not exist`);
-    }
-
-    const newTimesheet = new TimesheetSchema({
-      empId,
-      task,
-      date,
-      hoursWorked,
-    });
-    const savedTimesheet = await newTimesheet.save();
-    return {
-      message: "Created timesheet succesfully",
-      timesheetId: savedTimesheet._id,
-    };
+    console.log('Fetching all timesheets...');
+    const timesheets = await Timesheet.find({});
+    console.log('Found timesheets:', timesheets);
+    return timesheets;
   } catch (error) {
-    console.log("Failed to create timesheet:" + error.message);
-    throw new Error(error.message);
+    console.error('Error fetching timesheets:', error);
+    throw new Error('Could not fetch timesheets');
   }
 };
-const getAllEmployeeTimesheets = async (empId) => {
+
+const getTimesheetById = async (id) => {
   try {
-    if (!empId) {
-      throw new Error("Please provide an employee id");
-    }
-    const sessions = await redisClient.keys(`session:${empId}:*`);
-    if (sessions.length === 0) {
-      throw new Error(`Provided employee id ${empId}, does not exist`);
-    }
-    //might return an empty array if no timesheets are found
-    const employeeTimesheets = await TimesheetSchema.find({ empId });
-    return {
-      message: "Fetched employee timesheets sucessfully",
-      employeeTimesheets,
-    };
+    const timesheet = await Timesheet.findById(id);
+    return timesheet;
   } catch (error) {
-    console.log("Failed to get employee timesheets:" + error.message);
-    throw new Error(error.message);
+    console.error('Error fetching timesheet:', error);
+    throw new Error('Could not fetch timesheet');
   }
 };
+
+const createTimesheet = async (timesheetData) => {
+  try {
+    const timesheet = new Timesheet(timesheetData);
+    await timesheet.save();
+    return timesheet;
+  } catch (error) {
+    console.error('Error creating timesheet:', error);
+    throw new Error('Could not create timesheet');
+  }
+};
+
+const updateTimesheet = async (id, updateData) => {
+  try {
+    const timesheet = await Timesheet.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true, runValidators: true }
+    );
+    return timesheet;
+  } catch (error) {
+    console.error('Error updating timesheet:', error);
+    throw new Error('Could not update timesheet');
+  }
+};
+
+const deleteTimesheet = async (id) => {
+  try {
+    const timesheet = await Timesheet.findByIdAndDelete(id);
+    return timesheet;
+  } catch (error) {
+    console.error('Error deleting timesheet:', error);
+    throw new Error('Could not delete timesheet');
+  }
+};
+
 module.exports = {
-  createNewTimesheet,
-  getAllEmployeeTimesheets,
+  getAllTimesheets,
+  getTimesheetById,
+  createTimesheet,
+  updateTimesheet,
+  deleteTimesheet
 };

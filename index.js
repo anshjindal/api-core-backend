@@ -1,78 +1,97 @@
-const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
+require('dotenv').config();
+
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
+const morgan = require("morgan");
+
+// Import routes
 const newsletterRoute = require("./routes/newsletterRoutes");
 const blogRoute = require("./routes/blog");
 const contactRoute = require("./routes/contact");
 const employeeRoutes = require("./routes/employeeRoutes");
 const departmentRoutes = require("./routes/departmentRoutes");
 const designationRoutes = require("./routes/designationRoutes");
-
 const authRoutes = require("./routes/authenticationRoutes");
 const roleRoutes = require("./routes/roleRoutes");
-const timesheetRoutes = require("./routes/timesheetRoutes");
-const multer = require("multer");
-
-require("dotenv").config({ path: "./.env" });
+const leavesRoutes = require("./routes/leaves");
+const timesheetRoutes = require('./routes/timesheetRoutes');
 
 const connectToDB = require("./utils/database");
 const app = express();
-//new addon requires
-const cookieParser = require("cookie-parser");
-const helmet = require("helmet");
-const morgan = require("morgan");
-const leavesRoutes = require("./routes/leaves");
 
-// Use CORS middleware to allow requests from your frontend
+// Security middleware
+app.use(helmet());
+app.use(morgan('dev'));
+
+// CORS configuration
 app.use(
   cors({
     origin: [
       process.env.WOUESSI_FRONTEND_URL,
+      "http://localhost:3000",
       "https://dev.wouessi.com/en",
       "https://dev.wouessi.com",
       "https://www.wouessi.com/en",
       "https://www.wouessi.com",
       "https://www.wouessi.ca/en/",
       "https://www.wouessi.ca",
-    ], // Dynamically set the allowed CORS origin
+    ],
     credentials: true,
   })
 );
 
-// Middleware
+// Body parsing middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(bodyParser.json());
 
-// Add the newsletter route
+// Routes
 app.use("/api/newsletter", newsletterRoute);
 app.use("/api/blog", blogRoute);
 app.use("/api/contact", contactRoute);
-
-//new
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-
-// Routes
 app.use("/api/auth", authRoutes);
-
-// Employee Routes
 app.use("/api/employee", employeeRoutes);
 app.use("/api/department", departmentRoutes);
 app.use("/api/role", roleRoutes);
 app.use("/api/designation", designationRoutes);
 app.use("/api/leaves", leavesRoutes);
 app.use("/api/timesheet", timesheetRoutes);
-const dbName = "Wouessi";
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    success: false,
+    error: 'Something went wrong!',
+    message: process.env.NODE_ENV === 'development' ? err.message : undefined
+  });
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    error: 'Route not found'
+  });
+});
+
+// Connect to MongoDB
+const dbName = "kc_garments"; // Updated to match your database name
 connectToDB(dbName)
   .then(() => {
     console.log(`Successfully connected to the database: ${dbName}`);
   })
   .catch((error) => {
     console.error("Error connecting to the database", error);
-    process.exit(1); // Exit the process if the connection fails
+    process.exit(1);
   });
 
-// Define your routes
+// Basic routes
 app.get("/", (req, res) => {
   res.send("Welcome to Wouessi Back Office");
 });
@@ -82,7 +101,7 @@ app.get("/data", (req, res) => {
 });
 
 // Start the server
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
