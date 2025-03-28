@@ -1,10 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const DesignationController = require("../controllers/designationController");
-const verifySession = require("../middlewares/authenticationMiddleware");
+const designationController = require("../controllers/designationController");
+const { authenticateToken } = require("../middlewares/authenticationMiddleware");
 
-
-router.post("/designationAdd", verifySession, DesignationController.addDesignation);
-router.get("/getDesignations", verifySession,DesignationController.getAllDesignations);
+router.post("/designationAdd", authenticateToken, designationController.addDesignation);
+router.get("/getDesignations", authenticateToken, designationController.getAllDesignations);
 
 module.exports = router;
