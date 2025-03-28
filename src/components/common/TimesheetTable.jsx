@@ -218,6 +218,37 @@ const TimesheetTable = () => {
     return timesheets.reduce((total, timesheet) => total + timesheet.hours, 0);
   };
 
+  const calculateWeeklyHours = () => {
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay()); // Start from Sunday
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6); // End on Saturday
+    endOfWeek.setHours(23, 59, 59, 999);
+
+    return timesheets
+      .filter(timesheet => {
+        const timesheetDate = new Date(timesheet.date);
+        return timesheetDate >= startOfWeek && timesheetDate <= endOfWeek;
+      })
+      .reduce((total, timesheet) => total + timesheet.hours, 0);
+  };
+
+  const getWeekRange = () => {
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay());
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+    return {
+      start: formatDate(startOfWeek),
+      end: formatDate(endOfWeek)
+    };
+  };
+
   const handleSubmitForApproval = () => {
     setShowSuccessMessage(true);
     setTimeout(() => setShowSuccessMessage(false), 3000);
@@ -359,6 +390,53 @@ const TimesheetTable = () => {
           </tr>
         </tfoot>
       </Table>
+
+      <div className="mt-4">
+        <Card style={{
+          ...styles.card,
+          background: 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)',
+          marginBottom: '1rem'
+        }}>
+          <Card.Body className="p-4">
+            <Card.Title style={styles.cardTitle}>Weekly Hours Summary</Card.Title>
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <p className="mb-1" style={{ color: '#ffffff', opacity: '0.9' }}>
+                  Week of {getWeekRange().start} to {getWeekRange().end}
+                </p>
+                <h3 style={{ color: '#ffffff', margin: '0' }}>
+                  {calculateWeeklyHours()} hours
+                </h3>
+              </div>
+              <div style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                padding: '1rem',
+                borderRadius: '8px',
+                textAlign: 'center'
+              }}>
+                <div style={{ color: '#ffffff', fontSize: '0.9rem', opacity: '0.9' }}>
+                  Target Hours
+                </div>
+                <div style={{ color: '#ffffff', fontSize: '1.5rem', fontWeight: 'bold' }}>
+                  40
+                </div>
+              </div>
+            </div>
+            <div className="mt-3">
+              <div className="progress" style={{ height: '8px', backgroundColor: 'rgba(255, 255, 255, 0.2)' }}>
+                <div 
+                  className="progress-bar" 
+                  role="progressbar" 
+                  style={{ 
+                    width: `${Math.min((calculateWeeklyHours() / 40) * 100, 100)}%`,
+                    backgroundColor: '#ffffff'
+                  }}
+                ></div>
+              </div>
+            </div>
+          </Card.Body>
+        </Card>
+      </div>
 
       {lastUpdated && (
         <div style={styles.lastUpdated}>
