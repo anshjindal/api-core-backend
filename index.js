@@ -7,7 +7,8 @@ const contactRoute = require("./routes/contact");
 const employeeRoutes = require("./routes/employeeRoutes");
 const departmentRoutes=require("./routes/departmentRoutes")
 const designationRoutes=require("./routes/designationRoutes")
-
+const errorHandler=require('./middlewares/errorHandler');
+const trainingsRouter=require('./routes/trainings');
 const authRoutes = require("./routes/authenticationRoutes");
 const roleRoutes=require("./routes/roleRoutes");
 
@@ -46,6 +47,7 @@ app.use(express.json());
 app.use("/api/newsletter", newsletterRoute);
 app.use("/api/blog", blogRoute);
 app.use("/api/contact", contactRoute);
+app.use('/api/trainings', trainingsRouter);
 
 //new
 app.use(express.urlencoded({ extended: true }));
@@ -60,6 +62,9 @@ app.use("/api/department",departmentRoutes);
 app.use("/api/role",roleRoutes);
 app.use("/api/designation",designationRoutes);
 app.use("/api/leaves", leavesRoutes);
+
+// Error Handler
+app.use(errorHandler);
 
 const dbName = "Wouessi";
 
