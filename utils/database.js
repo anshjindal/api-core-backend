@@ -4,27 +4,26 @@ let connections = {};
 const connectToDB = async (dbName) => {
     mongoose.set('strictQuery', true);
 
-
     if (connections[dbName]) {
         console.log(`MongoDB Connection Ok. Connected to ${dbName}`);
-        return connections[dbName]; // Return the existing connection
+        return connections[dbName];
     }
 
     try {
-        const connection = await mongoose.connect(process.env.MONGODB_URI, {
+        // Use the correct environment variable and provide a fallback
+        const uri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/kc_garments?replicaSet=rs0';
+        
+        const connection = await mongoose.connect(uri, {
             dbName: dbName,
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        })
+            serverSelectionTimeoutMS: 5000
+        });
 
         connections[dbName] = connection;
-        
-
-
-        console.log(`MongoDB connected to ${dbName}`);
+        console.log(`Successfully connected to MongoDB: ${dbName}`);
 
     } catch (error) {
-        console.log(error);
+        console.error('MongoDB connection error:', error);
+        throw error; // Re-throw the error to handle it in the calling code
     }
 }
 
