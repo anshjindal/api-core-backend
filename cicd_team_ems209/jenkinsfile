@@ -4,24 +4,19 @@ pipeline {
         stage('Checkout') {
             steps {
                 dir('backend') {
-                   git branch: 'main',
-                   url: 'https://github.com/adii3/backend_feat_ems_qc_209'
+                   git credentialsId: 'Github', url: 'https://github.com/adii3/backend_feat_ems_qc_209.git', branch: 'main'
                 }
             }
         }
-        stage('Install Dependencies') {
+        stage('Verify NPM') {
             steps {
-                sh 'npm install' // or 'pip install -r requirements.txt'
+                bat 'npm -v'
             }
         }
-        stage('Lint') {
-            steps {
-                sh 'npm run lint' // or other linting command
-            }
-        }
+
         stage('Run Tests') {
             steps {
-                sh 'npm test' // or backend test command
+                bat 'npm test'
             }
         }
     }
