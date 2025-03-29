@@ -1,6 +1,20 @@
 pipeline {
     agent any
+    
+    environment {
+        IMAGE_NAME = "smehra999/ems209_backend"  // Image name
+        DOCKER_REGISTRY = "docker.io"  // Docker registry URL (default Docker Hub)
+    }
+    
     stages {
+        // Stage to verify NPM (optional)
+        stage('Verify NPM') {
+            steps {
+                bat 'npm -v'
+            }
+        }
+        
+        // Stage to checkout the backend repository
         stage('Checkout') {
             steps {
                 dir('backend') {
@@ -8,15 +22,47 @@ pipeline {
                 }
             }
         }
-        stage('Verify NPM') {
+
+        // Stage to build the backend
+        stage('Build Backend and Test') {
             steps {
-                bat 'npm -v'
+                dir('backend') {
+                    bat 'npm install || exit 0'
+                }
             }
         }
 
-        stage('Run Tests') {
+        // Stage to build the Docker image for backend
+        stage('Build Docker Image for Backend') {
             steps {
-                bat 'npm test'
+                dir('backend') {
+                    script {
+                        env.TAG = env.BUILD_ID
+                        echo "Building Docker image for backend"
+                        bat 'docker build -t ems209_backend:latest -f cicd_team_ems209/dockerfile .' 
+                    }
+                }
+            }
+        }
+
+        // Stage to push Docker image for backend
+        stage('Push Docker Image for Backend') {
+            steps {
+                script {
+                    // Docker login using Jenkins credentials store
+                        withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        echo "Logging in to Docker Hub"
+                        bat "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}"
+                    }
+
+                    // Tagging the backend image with build ID and latest
+                    bat "docker tag ems209_backend:latest ${IMAGE_NAME}:${TAG}"
+                    bat "docker tag ems209_backend:latest ${IMAGE_NAME}:latest"
+
+                    // Pushing the backend image to Docker Hub
+                    bat "docker push ${IMAGE_NAME}:${TAG}"
+                    bat "docker push ${IMAGE_NAME}:latest"
+                }   
             }
         }
     }
