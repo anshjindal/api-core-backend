@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+    
+    tools {
+        nodejs 'NodeJS'  
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'feat_ems_208', url: 'https://github.com/VNBcoding/api-core-backend.git'
+            }
+        }
+        
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    sh 'npm install'
+                }
+            }
+        }
+        
+        stage('Lint') {
+            steps {
+                script {
+                    sh 'npm run lint'
+                }
+            }
+        }
+        
+        stage('Run Tests') {
+            steps {
+                script {
+                    sh 'npm run test'
+                }
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Please check the logs.'
+        }
+    }
+}
