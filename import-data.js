@@ -1,5 +1,5 @@
-// Connect to MongoDB with replica set
-db = connect("mongodb://localhost:27017/wouessi_ems?replicaSet=rs0");
+// Connect to MongoDB
+db = connect("mongodb://localhost:27017/wouessi_ems");
 
 // Import Addresses
 db.addresses.insertMany([

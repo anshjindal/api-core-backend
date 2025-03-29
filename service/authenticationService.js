@@ -8,7 +8,7 @@ const { getDepartmentName, getDesignationTitle } = require("../service/employeeS
 
 
 const login = async (empId, password, req) => {
-  const employeeId = String(empId).trim();
+  const employeeId = String(empId).trim().toUpperCase();
  
   const employee = await Employee.findOne({ empId: employeeId, status: "active" }).populate("roleRef", "roleName").populate("addresses");
   
