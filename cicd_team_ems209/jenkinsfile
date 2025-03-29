@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                dir('backend') {
+                   git credentialsId: 'Github', url: 'https://github.com/adii3/backend_feat_ems_qc_209.git', branch: 'main'
+                }
+            }
+        }
+        stage('Verify NPM') {
+            steps {
+                bat 'npm -v'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                bat 'npm test'
+            }
+        }
+    }
+}
