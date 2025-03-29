@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                dir('backend') {
+                   git branch: 'main',
+                   url: 'https://github.com/adii3/backend_feat_ems_qc_209'
+                }
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install' // or 'pip install -r requirements.txt'
+            }
+        }
+        stage('Lint') {
+            steps {
+                sh 'npm run lint' // or other linting command
+            }
+        }
+        stage('Run Tests') {
+            steps {
+                sh 'npm test' // or backend test command
+            }
+        }
+    }
+}
