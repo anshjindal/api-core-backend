@@ -1,14 +1,14 @@
 const express = require("express");
 const { loginController, refreshTokenController } = require("../controllers/loginController");
-const { logoutController } = require("../controllers/logoutController"); 
-const verifySession = require("../middlewares/authenticationMiddleware"); 
+const { logoutController } = require("../controllers/logoutController");
+const { verifyToken } = require("../middlewares/authenticationMiddleware");
 const router = express.Router();
 
 // Login Routes
 router.post("/authenticate", loginController);
 router.post("/refresh", refreshTokenController);
 
-// Logout Route requires a valid authentication
-router.post("/logout", verifySession, logoutController);
+// Logout Route requires valid authentication
+router.post("/logout", verifyToken, logoutController);
 
 module.exports = router;

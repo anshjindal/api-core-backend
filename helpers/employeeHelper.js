@@ -3,7 +3,7 @@ const crypto = require("crypto");
 const Department = require("../models/department");
 const Designation = require("../models/designation");
 
-const getEmployeeModel = () => require("../models/employee");
+const getEmployeeModel = () => require("../models/Employee");
 
 
 // generating Unique Employee Id based on max and series

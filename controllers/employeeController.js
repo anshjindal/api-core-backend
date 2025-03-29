@@ -20,14 +20,11 @@ exports.addEmployee = async (req, res) => {
       }
 
       const employeeData = new EmployeeRequest(req.body);
-      console.log(employeeData);
-
       employeeData.addresses = addresses;
-      // Validating  Employee Data
+
       const errors = EmployeeRequest.validate(employeeData);
       if (errors) return res.status(400).json({ error: errors });
 
-      //sending  Employee Data & File Buffer to Service
       const response = await EmployeeService.createEmployee(employeeData, req.files);
       res.status(201).json(response);
     } catch (error) {
@@ -37,16 +34,12 @@ exports.addEmployee = async (req, res) => {
   });
 };
 
-
-//this handles the get employees request
 exports.getAllEmployees = async (req, res) => {
   try {
     const employees = await EmployeeService.getAllEmployees();
-
     if (!employees || employees.length === 0) {
       return res.status(404).json({ message: "No employees found." });
     }
-
     return res.status(200).json({
       message: "Employees retrieved successfully.",
       employees,
@@ -57,7 +50,6 @@ exports.getAllEmployees = async (req, res) => {
   }
 };
 
-//handles employee update api 
 exports.updateEmployee = async (req, res) => {
   upload.any()(req, res, async (err) => {
     if (err) {
@@ -82,7 +74,6 @@ exports.updateEmployee = async (req, res) => {
         message: "Employee updated successfully",
         updatedEmployee: result,
       });
-
     } catch (error) {
       console.error("Error Updating Employee:", error.message);
       return res.status(500).json({ error: error.message });
@@ -90,17 +81,40 @@ exports.updateEmployee = async (req, res) => {
   });
 };
 
-
-//getting employee based on employee id
-exports.getEmployeeById= async(req,res)=>{
-  try{
-    const empId=req.params.empId;
-    const empBean= await EmployeeService.getEmployeeById(empId);
+exports.getEmployeeById = async (req, res) => {
+  try {
+    const empId = req.params.empId;
+    const empBean = await EmployeeService.getEmployeeById(empId);
     return res.status(200).json({
-      message: "Employee retrived Successfully",
+      message: "Employee retrieved Successfully",
       employee: empBean,
     });
-  }catch(error){
-    return res.status(500).json({error: error.message});
+  } catch (error) {
+    console.error("Error retrieving Employee:", error.message);
+    return res.status(500).json({ error: error.message });
   }
-}
+};
+
+// 👇 Corrected clearly to use the dedicated service method
+exports.assignOffboardingProcess = async (req, res) => {
+  try {
+    const { empId, offboardingProcessId } = req.body;
+
+    if (!empId || !offboardingProcessId) {
+      return res.status(400).json({ message: "empId and offboardingProcessId are required." });
+    }
+
+    const updatedEmployee = await EmployeeService.assignOffboardingProcess(empId, offboardingProcessId);
+
+    return res.status(200).json({
+      message: "Offboarding process assigned successfully.",
+      employee: {
+        empId: updatedEmployee.empId,
+        offboardingProcessId: updatedEmployee.offboardingProcessId
+      }
+    });
+  } catch (error) {
+    console.error("Error assigning offboarding process:", error.message);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
