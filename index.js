@@ -11,6 +11,7 @@ const designationRoutes=require("./routes/designationRoutes")
 const authRoutes = require("./routes/authenticationRoutes");
 const roleRoutes=require("./routes/roleRoutes");
 const employmentStatusRoutes = require("./routes/employmentStatusRoutes");
+const errorHandler = require('./middlewares/errorHandler');
 
 const multer = require("multer");
 
@@ -66,6 +67,8 @@ app.use("/api/leaves", leavesRoutes);
 app.use("/api/job-info", jobInfoRoutes);
 
 app.use("/api/employment-status", employmentStatusRoutes);
+
+app.use(errorHandler);
 
 const dbName = "Wouessi";
 
