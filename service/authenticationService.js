@@ -1,10 +1,12 @@
 const bcrypt = require("bcryptjs");
 const redisClient = require("../utils/redisConfig");
 const Employee = require("../models/employee.js");
-const { generateAccessToken, createRefreshToken } = require("../utils/jwtUtility"); 
+const { generateAccessToken, generateRefreshToken } = require("../utils/jwtUtility"); 
 const { v4: uuidv4 } = require("uuid");
 const useragent = require("useragent");
 const { getDepartmentName, getDesignationTitle } = require("../service/employeeService.js"); 
+const jwt = require("jsonwebtoken");
+
 
 
 const login = async (empId, password, req) => {
@@ -19,10 +21,21 @@ const login = async (empId, password, req) => {
   if (!isMatch) throw new Error("Invalid credentials! Please enter valid credentials");
 
   //Generating the JWT access token
-  const accessToken = generateAccessToken(empId, employee.role);
+  const accessToken = generateAccessToken({
+    empId: employee.empId,
+    role: employee.role
+  });
+  
 
   // First time login using create refresh token for session refresh and all state management
-  const { refreshToken, sessionId } = await createRefreshToken(empId); 
+  const refreshToken = jwt.sign(
+    { empId },
+    process.env.JWT_REFRESH_SECRET_KEY,
+    { expiresIn: process.env.JWT_REFRESH_EXPIRY || "3d" }
+  );
+  
+  const sessionId = uuidv4(); // create one if needed
+ 
 
   const userAgent = useragent.parse(req.headers["user-agent"]);
 

@@ -10,13 +10,22 @@ dotenv.config();
 // Create Express app
 const app = express();
 
+const cookieParser = require("cookie-parser");
+app.use(cookieParser()); //Required to access req.cookies.refreshToken
+
 // Middleware
 app.use('/api/test', testTokenRoute);
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 app.use(express.json());
 
 // Connect to Database
 connectDB();
+
+const authRoutes = require('./routes/authenticationRoutes'); // 👈 Make sure this file exists
+app.use('/api/auth', authRoutes);
 
 // Routes
 const offboardingRoutes = require('./routes/offboardingRoutes');
