@@ -109,7 +109,7 @@ const UserSchema = new mongoose.Schema({
     default: undefined
   },
   teamId: { 
-    type: mongoose.Schema.Types.ObjectId, 
+    type: String, 
     ref: "Team" 
   },
   documents: [
