@@ -1,13 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const EmployeeController = require("../controllers/employeeController");
-const verifySession = require("../middlewares/authenticationMiddleware"); 
-const upload = require("../middlewares/fileStorageMiddlware");
+const employeeController = require("../controllers/employeeController");
+const { authenticateToken } = require("../middlewares/authenticationMiddleware"); 
+const multer = require("multer");
+const upload = multer({ storage: multer.memoryStorage() });
 
-// employee creation route
-router.post("/empAdd", verifySession, EmployeeController.addEmployee);
-router.get("/employees", verifySession,EmployeeController.getAllEmployees);
-router.put("/:empId", verifySession,EmployeeController.updateEmployee);
-router.get("/:empId",verifySession,EmployeeController.getEmployeeById);
+// employee creation route with file upload
+router.post("/empAdd", authenticateToken, upload.any(), employeeController.addEmployee);
+router.get("/employees", authenticateToken, employeeController.getAllEmployees);
+router.put("/:empId", authenticateToken, upload.any(), employeeController.updateEmployee);
+router.get("/:empId", authenticateToken, employeeController.getEmployeeById);
 
 module.exports = router;

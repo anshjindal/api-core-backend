@@ -1,25 +1,25 @@
-const { verifiedToken } = require("../utils/jwtUtility");
-const redisClient = require("../utils/redisConfig");
+const jwt = require('jsonwebtoken');
 
-const verifySession = async (req, res, next) => {
-  const token = req.cookies.accessToken;
-  if (!token) return res.status(401).json({ message: "Access Denied" });
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+
+  if (!token) {
+    return res.status(401).json({ message: 'Access token is required' });
+  }
 
   try {
-    const decoded = verifiedToken(token, process.env.JWT_SECRET_KEY);
-   
-
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     req.user = decoded;
-
-    const sessions = await redisClient.keys(`session:${decoded.empId}:*`);
-    if (sessions.length === 0) {
-      return res.status(401).json({ message: "Session Expired. Please login again." });
-    }
-
     next();
-  } catch (err) {
-    res.status(403).json({ message: "Invalid Token" });
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'Token has expired' });
+    }
+    return res.status(403).json({ message: 'Invalid token' });
   }
 };
 
-module.exports = verifySession;
+module.exports = {
+  authenticateToken
+}; 

@@ -12,7 +12,7 @@ const connectToDB = async (dbName) => {
 
     try {
         const connection = await mongoose.connect(process.env.MONGODB_URI, {
-            dbName: dbName, // ✅ Keep this, it's fine
+            dbName: dbName, 
         });
 
         connections[dbName] = connection;

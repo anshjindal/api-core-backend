@@ -1,9 +1,7 @@
 const DesignationService = require("../service/designationService");
-  
 
-exports.addDesignation = async (req, res) => {
+const addDesignation = async (req, res) => {
     try {
-  
       //Calling  Service Layer for Validation & saving 
       const response = await DesignationService.createDesignation(req.body);
   
@@ -15,11 +13,16 @@ exports.addDesignation = async (req, res) => {
     }
 };
 
-exports.getAllDesignations = async (req, res) => {
+const getAllDesignations = async (req, res) => {
     try {
       const designations = await DesignationService.fetchDesignations();
       return res.status(200).json(designations);
     } catch (error) {
       return res.status(500).json({ error: "Fetching designations failed: " + error.message });
     }
+};
+
+module.exports = {
+    addDesignation,
+    getAllDesignations
 };

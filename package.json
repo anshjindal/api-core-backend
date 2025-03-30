@@ -4,10 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "powershell Copy-Item -Path .env.local -Destination .env -Force > $null && node index.js",
+    "start:docker": "powershell Copy-Item -Path .env.docker -Destination .env -Force > $null && node index.js",
     "dev": "nodemon index.js",
+    "dev:local": "powershell Copy-Item -Path .env.local -Destination .env -Force > $null && nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky"
+    "prepare": "husky",
+    "migrate:teams": "node scripts/migrateTeams.js"
   },
   "keywords": [],
   "author": "",
@@ -33,6 +36,7 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
+    "eslint": "^9.23.0",
     "husky": "^9.1.7"
   }
 }

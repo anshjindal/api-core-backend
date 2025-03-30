@@ -1,7 +1,6 @@
 const DepartmentService = require("../service/departmentService");
-  
 
-exports.addDepartment = async (req, res) => {
+const addDepartment = async (req, res) => {
     try {
       console.log("🔍 Incoming Department Request:", req.body);
   
@@ -16,7 +15,7 @@ exports.addDepartment = async (req, res) => {
     }
 };
 
-exports.getAllDepartments = async (req, res) => {
+const getAllDepartments = async (req, res) => {
     try {
       const departments = await DepartmentService.fetchDepartments();
       return res.status(200).json(departments);
@@ -24,4 +23,9 @@ exports.getAllDepartments = async (req, res) => {
       console.error("Error Fetching Departments:", error.message);
       return res.status(500).json({ error: "Fetching departments failed: " + error.message });
     }
+};
+
+module.exports = {
+    addDepartment,
+    getAllDepartments
 };

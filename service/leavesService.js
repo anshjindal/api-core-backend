@@ -1,16 +1,16 @@
 const Leaves = require("../models/leaves");
 
-exports.getAllLeaves = async (empId) => {
+const getAllLeaves = async (empId) => {
   const leaves = await Leaves.find({ empId: empId });
   return leaves;
 };
 
-exports.createLeave = async (leaveData) => {
+const createLeave = async (leaveData) => {
   const newLeave = new Leaves(leaveData);
   return await newLeave.save();
 };
 
-exports.updateLeave = async (leaveId, updatedData) => {
+const updateLeave = async (leaveId, updatedData) => {
   try {
     const existingLeave = await Leaves.findById(leaveId);
 
@@ -38,4 +38,10 @@ exports.updateLeave = async (leaveId, updatedData) => {
   } catch (error) {
     throw new Error(error.message);
   }
+};
+
+module.exports = {
+    getAllLeaves,
+    createLeave,
+    updateLeave
 };
