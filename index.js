@@ -11,6 +11,7 @@ const path = require('path');
 const authRoutes = require("./routes/authenticationRoutes");
 const roleRoutes=require("./routes/roleRoutes");
 const employmentStatusRoutes = require("./routes/employmentStatusRoutes");
+const internRoutes = require("./routes/internRoutes");
 
 
 require("dotenv").config({ path: "./.env" });
@@ -67,10 +68,10 @@ app.use("/api/department",departmentRoutes);
 app.use("/api/role",roleRoutes);
 app.use("/api/designation",designationRoutes);
 app.use("/api/leaves", leavesRoutes);
-
 app.use("/api/job-info", jobInfoRoutes);
-
 app.use("/api/employment-status", employmentStatusRoutes);
+app.use("/api/interns", internRoutes);
+
 
 const dbName = "Wouessi";
 
