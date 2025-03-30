@@ -2,6 +2,8 @@ const EmployeeService = require("../service/employeeService");
 const EmployeeRequest = require("../helpers/employeeRequest");
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
+const uploadFile = require("../utils/upload"); 
+const Employee = require("../models/employee");
 
 exports.addEmployee = async (req, res) => {
   upload.any()(req, res, async (err) => {
@@ -104,3 +106,33 @@ exports.getEmployeeById= async(req,res)=>{
     return res.status(500).json({error: error.message});
   }
 }
+
+//Upload Image
+exports.uploadProfilePicture = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+    const empId = req.params.empId;
+    const fileExtension = req.file.mimetype.split('/')[1];
+    const savedFilePath = await uploadFile.saveFile(req.file, empId);
+    const updateResult = await Employee.findOneAndUpdate(
+      { empId }, 
+      { imageFolder: savedFilePath }, 
+      { new: true } 
+    );
+
+    if (!updateResult) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+    const filePath = `/uploads/${empId}.${fileExtension}`;
+    // Return the file path to the frontend
+    res.status(200).json({
+      message: "Profile picture uploaded successfully!",
+      filePath: filePath,  se
+    });
+  } catch (error) {
+    console.error("Error uploading profile picture:", error);
+    res.status(500).json({ error: `Error uploading profile picture: ${error.message}` });
+  }
+};
