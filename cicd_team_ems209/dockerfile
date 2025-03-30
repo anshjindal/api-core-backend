@@ -13,7 +13,7 @@ RUN npm ci --frozen-lockfile
 COPY . .
 
 # Expose the backend port
-EXPOSE 3000
+EXPOSE 5000
 
 # Start the app
 CMD ["npm", "start"]

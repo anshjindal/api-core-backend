@@ -65,5 +65,31 @@ pipeline {
                 }   
             }
         }
+        
+        stage('Deploy Backend to Kubernetes') {
+            steps {
+                script {
+                    withEnv(["KUBECONFIG=C:\\Users\\smehr\\.kube\\config"]) {
+                        dir('backend') {
+                            
+                            // Create namespace if it does not exist
+                            bat "kubectl get namespace team-ems209 || kubectl create namespace team-ems209"
+
+                            // Apply Kubernetes manifests
+                            bat "kubectl apply -f cicd_team_ems209\\k8s\\ --namespace=team-ems209"
+                            
+                            // Check if the deployment exists before setting the image
+                            bat "kubectl rollout status deployment/backend-deployment --namespace=team-ems209 || exit 0"
+
+                            // Update Kubernetes deployment with the new backend image
+                            bat "kubectl set image deployment/backend-deployment backend=${IMAGE_NAME}:${TAG} --namespace=team-ems209"
+                            
+                            // Verify deployment status
+                            bat "kubectl get pods --namespace=team-ems209"
+                        }
+                    }
+                }
+            }
+        }
     }
 }
