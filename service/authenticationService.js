@@ -19,7 +19,9 @@ const login = async (empId, password, req) => {
   if (!isMatch) throw new Error("Invalid credentials! Please enter valid credentials");
 
   //Generating the JWT access token
-  const accessToken = generateAccessToken(empId, employee.role);
+  const userRole = employee.roleRef?.roleName || "Employee"; // Fallback role if missing
+  const accessToken = generateAccessToken(empId, userRole);
+  
 
   // First time login using create refresh token for session refresh and all state management
   const { refreshToken, sessionId } = await createRefreshToken(empId); 

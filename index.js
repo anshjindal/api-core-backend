@@ -8,7 +8,7 @@ const employeeRoutes = require("./routes/employeeRoutes");
 const departmentRoutes=require("./routes/departmentRoutes")
 const designationRoutes=require("./routes/designationRoutes")
 const errorHandler=require('./middlewares/errorHandler');
-const trainingsRouter=require('./routes/trainings');
+const trainingsRoutes=require('./routes/trainings');
 const authRoutes = require("./routes/authenticationRoutes");
 const roleRoutes=require("./routes/roleRoutes");
 
@@ -42,16 +42,16 @@ app.use(
 
 // Middleware
 app.use(express.json());
+app.use(cookieParser());
 
 // Add the newsletter route
 app.use("/api/newsletter", newsletterRoute);
 app.use("/api/blog", blogRoute);
 app.use("/api/contact", contactRoute);
-app.use('/api/trainings', trainingsRouter);
+app.use('/api/trainings', trainingsRoutes);
 
 //new
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
 
 // Routes
 app.use("/api/auth", authRoutes);
