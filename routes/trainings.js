@@ -34,6 +34,6 @@ router.post('/seed', async (req, res) => {
 });
 
 
-router.delete('/:id', verifySession, authorizeRoles('HR', 'Admin','Project Manager','Developer'), deleteTraining);
+router.delete('/:id', verifySession, authorizeRoles('HR', 'Admin'), deleteTraining);
 
 module.exports = router;
