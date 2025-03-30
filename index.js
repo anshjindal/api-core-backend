@@ -14,6 +14,7 @@ const employmentStatusRoutes = require("./routes/employmentStatusRoutes");
 const internRoutes = require("./routes/internRoutes");
 
 
+
 require("dotenv").config({ path: "./.env" });
 
 const connectToDB = require("./utils/database");
@@ -43,7 +44,7 @@ app.use(
 
 // Middleware
 app.use(express.json());
-
+const errorHandler = require('./middlewares/errorHandler');
 
 
 // Serve files in the uploads folder as static content
@@ -70,8 +71,6 @@ app.use("/api/designation",designationRoutes);
 app.use("/api/leaves", leavesRoutes);
 app.use("/api/job-info", jobInfoRoutes);
 app.use("/api/employment-status", employmentStatusRoutes);
-app.use("/api/interns", internRoutes);
-
 
 const dbName = "Wouessi";
 
