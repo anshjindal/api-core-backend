@@ -12,10 +12,8 @@ const connectToDB = async (dbName) => {
 
     try {
         const connection = await mongoose.connect(process.env.MONGODB_URI, {
-            dbName: dbName,
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        })
+            dbName: dbName, // ✅ Keep this, it's fine
+        });
 
         connections[dbName] = connection;
         
