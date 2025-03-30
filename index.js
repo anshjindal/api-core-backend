@@ -7,13 +7,12 @@ const contactRoute = require("./routes/contact");
 const employeeRoutes = require("./routes/employeeRoutes");
 const departmentRoutes=require("./routes/departmentRoutes")
 const designationRoutes=require("./routes/designationRoutes")
-
+const path = require('path');
 const authRoutes = require("./routes/authenticationRoutes");
 const roleRoutes=require("./routes/roleRoutes");
 const employmentStatusRoutes = require("./routes/employmentStatusRoutes");
 const errorHandler = require('./middlewares/errorHandler');
 
-const multer = require("multer");
 
 require("dotenv").config({ path: "./.env" });
 
@@ -44,6 +43,12 @@ app.use(
 
 // Middleware
 app.use(express.json());
+
+
+
+// Serve files in the uploads folder as static content
+const uploadDirectory = path.join(__dirname, "uploads");
+app.use("/uploads", express.static(uploadDirectory));
 
 // Add the newsletter route
 app.use("/api/newsletter", newsletterRoute);
