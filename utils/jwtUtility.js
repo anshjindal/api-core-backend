@@ -1,7 +1,16 @@
 const jsonwebtoken = require("jsonwebtoken");
 const crypto = require("crypto");
 const redisClient = require("../utils/redisConfig");
+const mongoose = require("mongoose");
 
+const Role = mongoose.models.Role || mongoose.model(
+    "Role",
+    new mongoose.Schema({
+      roleName: String,
+      logId: String,
+    }),
+    "roles"
+    );
 const generateTokenId = () => crypto.randomBytes(16).toString("hex");
 
 // Generating JWT Access Token
@@ -71,11 +80,22 @@ const generateRefreshToken = async (req, res) => {
         if (!validSession) return res.status(401).json({ message: "Invalid session. Please log in again." });
 
         // Generate a new access token
-        const accessToken = jsonwebtoken.sign(
-            { empId },
+        const roleDoc = await Role.findOne({ logId: empId });
+        if (!roleDoc) {
+            console.error("Role not found for empId:", empId);
+            return res.status(404).json({ message: "User role not found" });
+          }
+          
+          const userRole = roleDoc.roleName;
+          console.log("Resolved user role:", userRole);
+          
+          // ✅ Generate new access token with role included
+          const accessToken = jsonwebtoken.sign(
+            { empId, role: userRole },
             process.env.JWT_SECRET_KEY,
             { expiresIn: process.env.JWT_ACCESS_EXPIRY }
-        );
+            );
+
 
         
         const refreshTokenExp = decoded.exp * 1000; 
