@@ -138,3 +138,9 @@ async function runTests() {
 }
 
 module.exports = { runTests };
+
+// run when this file is called directly
+if (require.main === module) {
+  runTests()
+    .finally(() => mongoose.connection.close());
+}
