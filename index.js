@@ -9,6 +9,7 @@ const departmentRoutes=require("./routes/departmentRoutes")
 const designationRoutes=require("./routes/designationRoutes")
 const teamRoutes=require("./routes/teamRoutes")
 
+
 const authRoutes = require("./routes/authenticationRoutes");
 const roleRoutes=require("./routes/roleRoutes");
 
@@ -29,16 +30,30 @@ app.use(
   cors({
     origin: [
       process.env.WOUESSI_FRONTEND_URL,
+      "http://localhost:3000",  // Add local development URL
       "https://dev.wouessi.com/en",
       "https://dev.wouessi.com",
       "https://www.wouessi.com/en",
       "https://www.wouessi.com",
       "https://www.wouessi.ca/en/",
       "https://www.wouessi.ca",
-    ], // Dynamically set the allowed CORS origin
+    ],
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    exposedHeaders: ['Content-Range', 'X-Content-Range']
   })
 );
+
+// Add security headers middleware
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  );
+  next();
+});
 
 // Middleware
 app.use(express.json());
@@ -60,10 +75,11 @@ app.use("/api/employee", employeeRoutes);
 app.use("/api/department",departmentRoutes);
 app.use("/api/role",roleRoutes);
 app.use("/api/designation",designationRoutes);
+app.use("/api/team", teamRoutes);
 app.use("/api/leaves", leavesRoutes);
 app.use("/api/teams", teamRoutes); 
 
-const dbName = "Wouessi";
+const dbName = "wouessi_ems";
 
 connectToDB(dbName)
   .then(() => {

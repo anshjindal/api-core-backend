@@ -1,5 +1,4 @@
-const { verifiedToken } = require("../utils/jwtUtility");
-const redisClient = require("../utils/redisConfig");
+const jwt = require('jsonwebtoken');
 
 const verifySession = async (req, res, next) => {
   let token = req.cookies.accessToken;
@@ -14,16 +13,15 @@ const verifySession = async (req, res, next) => {
   try {
     const decoded = verifiedToken(token, process.env.JWT_SECRET_KEY);
     req.user = decoded;
-
-    const sessions = await redisClient.keys(`session:${decoded.empId}:*`);
-    if (sessions.length === 0) {
-      return res.status(401).json({ message: "Session Expired. Please login again." });
-    }
-
     next();
-  } catch (err) {
-    res.status(403).json({ message: "Invalid Token" });
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'Token has expired' });
+    }
+    return res.status(403).json({ message: 'Invalid token' });
   }
 };
 
-module.exports = verifySession;
+module.exports = {
+  authenticateToken
+}; 

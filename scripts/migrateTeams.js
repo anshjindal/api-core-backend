@@ -38,7 +38,8 @@ const sampleTeams = [
 const migrateTeams = async () => {
     try {
         // Connect to MongoDB
-        await connectToDB('Wouessi');
+        await connectToDB('wouessi_ems');
+
         console.log('Connected to MongoDB');
 
         // Clear existing teams
