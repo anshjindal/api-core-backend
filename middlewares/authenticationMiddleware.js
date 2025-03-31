@@ -2,13 +2,17 @@ const { verifiedToken } = require("../utils/jwtUtility");
 const redisClient = require("../utils/redisConfig");
 
 const verifySession = async (req, res, next) => {
-  const token = req.cookies.accessToken;
+  let token = req.cookies.accessToken;
+
+  // Check Authorization header if cookie not found
+  if (!token && req.headers.authorization && req.headers.authorization.startsWith("Bearer ")) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+
   if (!token) return res.status(401).json({ message: "Access Denied" });
 
   try {
     const decoded = verifiedToken(token, process.env.JWT_SECRET_KEY);
-   
-
     req.user = decoded;
 
     const sessions = await redisClient.keys(`session:${decoded.empId}:*`);
