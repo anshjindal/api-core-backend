@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const verifySession = async (req, res, next) => {
-  let token = req.cookies.accessToken;
+  const token = req.cookies.accessToken || (req.headers.authorization && req.headers.authorization.split(" ")[1]);
 
   // Check Authorization header if cookie not found
   if (!token && req.headers.authorization && req.headers.authorization.startsWith("Bearer ")) {
