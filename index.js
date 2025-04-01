@@ -5,50 +5,30 @@ const newsletterRoute = require("./routes/newsletterRoutes");
 const blogRoute = require("./routes/blog");
 const contactRoute = require("./routes/contact");
 const employeeRoutes = require("./routes/employeeRoutes");
-const departmentRoutes = require("./routes/departmentRoutes");
-const designationRoutes = require("./routes/designationRoutes");
 
 const authRoutes = require("./routes/authenticationRoutes");
 const roleRoutes = require("./routes/roleRoutes");
 
 const leaveRequestRoutes = require("./routes/leaveRequestRoutes"); // Import leaveRequestRoutes
 
-const multer = require("multer");
 
-require('dotenv').config({ path: "./.env" });
-
-const connectToDB = require("./utils/database");
-
-// Addon requires
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 const morgan = require("morgan");
-
-const app = express();
+const leavesRoutes = require("./routes/leaves");
 
 // Use CORS middleware to allow requests from your frontend
-app.use(cors({
-  origin: [process.env.WOUESSI_FRONTEND_URL, "https://dev.wouessi.com/en", "https://dev.wouessi.com", "https://www.wouessi.com/en", "https://www.wouessi.com", "https://www.wouessi.ca/en/", "https://www.wouessi.ca"],
-  credentials: true,
-}));
 
-// Middleware
-app.use(express.json());
+
+
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
 
 // Routes
 app.use('/api/newsletter', newsletterRoute);
 app.use('/api/blog', blogRoute);
 app.use('/api/contact', contactRoute);
 app.use("/api/auth", authRoutes);
-app.use("/api/employee", employeeRoutes);
-app.use("/api/department", departmentRoutes);
-app.use("/api/role", roleRoutes);
-app.use("/api/designation", designationRoutes);
 
-// Add the leave request routes here
-app.use("/api/leave-requests", leaveRequestRoutes);
 
 const dbName = "Wouessi";
 
@@ -62,12 +42,12 @@ connectToDB(dbName)
   });
 
 // Define your routes
-app.get('/', (req, res) => {
-  res.send('Welcome to Wouessi Back Office');
+app.get("/", (req, res) => {
+  res.send("Welcome to Wouessi Back Office");
 });
 
-app.get('/data', (req, res) => {
-  res.json({ message: 'Hello from the server!' });
+app.get("/data", (req, res) => {
+  res.json({ message: "Hello from the server!" });
 });
 
 // Start the server
