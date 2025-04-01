@@ -33,15 +33,28 @@ const getTeams = async () => {
           from: "employees",
           localField: "members.empId",
           foreignField: "empId",
-          as: "employeeInfo",
-        },
+          as: "employeeInfo"
+        }
       },
       {
         // 3) We may or may not have a matched employee doc
         $unwind: {
           path: "$employeeInfo",
-          preserveNullAndEmptyArrays: true,
-        },
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $addFields: {
+          "members.fullName": {
+            $cond: {
+              if: { $and: ["$employeeInfo.firstName", "$employeeInfo.lastName"] },
+              then: {
+                $concat: ["$employeeInfo.firstName", " ", "$employeeInfo.lastName"]
+              },
+              else: "$members.empId"
+            }
+          }
+        }
       },
       {
         // 4) Group everything back into a single doc per Team
@@ -55,14 +68,12 @@ const getTeams = async () => {
               empId: "$members.empId",
               role: "$members.role",
               status: "$members.status",
-              fullName: {
-                $concat: ["$employeeInfo.firstName", " ", "$employeeInfo.lastName"],
-              },
-              documents: "$members.documents"
-            },
-          },
-        },
-      },
+              documents: "$members.documents",
+              fullName: "$members.fullName"
+            }
+          }
+        }
+      }
     ]);
 
     return teams;
