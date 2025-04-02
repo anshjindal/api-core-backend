@@ -11,7 +11,8 @@ const path = require('path');
 const authRoutes = require("./routes/authenticationRoutes");
 const roleRoutes=require("./routes/roleRoutes");
 const employmentStatusRoutes = require("./routes/employmentStatusRoutes");
-const errorHandler = require('./middlewares/errorHandler');
+const internRoutes = require("./routes/internRoutes");
+
 
 
 require("dotenv").config({ path: "./.env" });
@@ -43,7 +44,7 @@ app.use(
 
 // Middleware
 app.use(express.json());
-
+const errorHandler = require('./middlewares/errorHandler');
 
 
 // Serve files in the uploads folder as static content
@@ -68,12 +69,8 @@ app.use("/api/department",departmentRoutes);
 app.use("/api/role",roleRoutes);
 app.use("/api/designation",designationRoutes);
 app.use("/api/leaves", leavesRoutes);
-
 app.use("/api/job-info", jobInfoRoutes);
-
 app.use("/api/employment-status", employmentStatusRoutes);
-
-app.use(errorHandler);
 
 const dbName = "Wouessi";
 
