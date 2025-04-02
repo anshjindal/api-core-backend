@@ -12,6 +12,7 @@ const teamRoutes=require("./routes/teamRoutes")
 
 const authRoutes = require("./routes/authenticationRoutes");
 const roleRoutes=require("./routes/roleRoutes");
+const { runTests } = require("./tests/test-basic-DataSetup");
 
 const multer = require("multer");
 
@@ -82,11 +83,14 @@ app.use("/api/teams", teamRoutes);
 const dbName = "wouessi_ems";
 
 connectToDB(dbName)
-  .then(() => {
-    console.log(`Successfully connected to the database: ${dbName}`);
+  .then(async () => {
+    console.log(`✅ Successfully connected to the database: ${dbName}`);
+
+    // Run test data setup at startup
+    await runTests();
   })
   .catch((error) => {
-    console.error("Error connecting to the database", error);
+    console.error("❌ Error connecting to the database", error);
     process.exit(1); // Exit the process if the connection fails
   });
 
