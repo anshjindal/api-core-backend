@@ -1,0 +1,49 @@
+[
+  {
+    "employeeId": "EMP001",
+    "name": "Alice Johnson",
+    "email": "alice.johnson@example.com",
+    "role": "Capstone Student",
+    "status": "Active",
+    "capstoneDetails": {
+      "projectName": "AI-Powered Chatbot",
+      "mentor": "Dr. Smith",
+      "rippenWork": true
+    },
+    "teamId": "TEAM00001"
+  },
+  {
+    "employeeId": "EMP002",
+    "name": "Bob Smith",
+    "email": "bob.smith@example.com",
+    "role": "Employee",
+    "status": "Active",
+    "teamId": "653e4567e94a4b2d78abcd01"
+  },
+  {
+    "employeeId": "EMP003",
+    "name": "Charlie Davis",
+    "email": "charlie.davis@example.com",
+    "role": "Intern",
+    "status": "Active",
+    "internDetails": {
+      "type": "Paid",
+      "university": "Ontario Tech University",
+      "startDate": "2024-01-15T00:00:00.000Z",
+      "endDate": "2024-06-30T00:00:00.000Z"
+    },
+    "teamId": "653e4567e94a4b2d78abcd02"
+  },
+  {
+    "employeeId": "EMP004",
+    "name": "David Lee",
+    "email": "david.lee@example.com",
+    "role": "Partner",
+    "status": "Active",
+    "partnerDetails": {
+      "company": "Tech Solutions Inc.",
+      "isPaid": true
+    },
+    "teamId": "653e4567e94a4b2d78abcd02"
+  }
+]
