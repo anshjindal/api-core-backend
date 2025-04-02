@@ -30,6 +30,15 @@ const TeamSchema = mongoose.Schema({
       required: true,
       enum: ["Team Lead", "Member"]
     },
+    documents: [{
+      fileName: String,
+      fileSize: Number,
+      mimeType: String,
+      uploadDate: {
+      type: Date,
+      default: Date.now
+      }}
+    ],
     joinDate: {
       type: Date,
       default: Date.now

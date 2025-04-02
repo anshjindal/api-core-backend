@@ -1,33 +1,45 @@
 const express = require("express");
 const router = express.Router();
 const teamController = require("../controllers/teamController");
-const { authenticateToken } = require("../middlewares/authenticationMiddleware");
+const verifySession = require("../middlewares/authenticationMiddleware");
+
+// import multer
+const multer = require("multer");
+const upload = multer({ storage: multer.memoryStorage() });
+
+// Documents route
+router.post(
+  "/:teamId/members/:empId/documents",
+  verifySession,
+  upload.single("file"),
+  teamController.uploadMemberDocument
+);
+
+router.get(
+  "/:teamId/members/:empId/documents",
+  verifySession,
+  teamController.getMemberDocuments
+);
 
 // Create a new team
-router.post("/", authenticateToken, teamController.createTeam);
+router.post("/", verifySession, teamController.createTeam);
 
 // Get all teams
-router.get("/", authenticateToken, teamController.getAllTeams);
+router.get("/", verifySession, teamController.getAllTeams);
 
-// Get team by ID
-router.get("/:id", authenticateToken, teamController.getTeamById);
+// Get single team
+router.get("/:teamId", verifySession, teamController.getTeamById);
 
-// Update team
-router.put("/:id", authenticateToken, teamController.updateTeam);
+// Update the entire team
+router.put("/:teamId", verifySession, teamController.updateTeam);
 
-// Delete team
-router.delete("/:id", authenticateToken, teamController.deleteTeam);
+// Add member to a team
+router.post("/:teamId/members", verifySession, teamController.addMemberToTeam);
 
-// Add member to team
-router.post("/:teamId/members", authenticateToken, teamController.addMemberToTeam);
+// Update a specific member (like role, status) in a team
+router.put("/:teamId/members/:empId", verifySession, teamController.updateTeamMember);
 
-// Remove member from team
-router.delete("/:teamId/members/:employeeId", authenticateToken, teamController.removeMemberFromTeam);
+// Remove member
+router.delete("/:teamId/members/:empId", verifySession, teamController.removeMemberFromTeam);
 
-// Get team members
-router.get("/:teamId/members", authenticateToken, teamController.getTeamMembers);
-
-// Update member role in team
-router.patch("/:teamId/members/:employeeId/role", authenticateToken, teamController.updateMemberRole);
-
-module.exports = router; 
+module.exports = router;

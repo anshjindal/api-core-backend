@@ -1,4 +1,4 @@
-require('dotenv').config({ path: './.env' });
+require('dotenv').config({ path: '../.env' });
 const mongoose = require('mongoose');
 const Team = require('../models/team');
 const connectToDB = require('../utils/database');
@@ -39,6 +39,7 @@ const migrateTeams = async () => {
     try {
         // Connect to MongoDB
         await connectToDB('wouessi_ems');
+
         console.log('Connected to MongoDB');
 
         // Clear existing teams
