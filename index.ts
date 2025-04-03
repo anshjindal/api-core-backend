@@ -1,18 +1,19 @@
-const express = require("express");
-const cors = require("cors");
-const newsletterRoute = require("./routes/newsletterRoutes");
-const categoryRoute = require("./routes/category");
-const blogRoute = require("./routes/blog");
-const contactRoute = require("./routes/contact");
+import express, { Request, Response } from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import newsletterRoute from "./routes/newsletterRoutes";
+import categoryRoute from "./routes/category";
+import blogRoute from "./routes/blog";
+import contactRoute from "./routes/contact";
+import connectToDB from "./utils/database";
 
-require("dotenv").config({ path: "./.env" });
-const connectToDB = require("./utils/database");
+dotenv.config({ path: "./.env" });
 
 const app = express();
 
-// Use CORS middleware with allowed origins
-const allowedOrigins = [
-  process.env.WOUESSI_FRONTEND_URL,
+// Define allowed origins
+const allowedOrigins: string[] = [
+  process.env.WOUESSI_FRONTEND_URL!,
   "https://dev.wouessi.com/en",
   "https://dev.wouessi.com",
   "https://www.wouessi.com/en",
@@ -23,16 +24,15 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps or curl requests)
+    origin: (origin: string | undefined, callback) => {
       if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) !== -1) {
+      if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
       return callback(new Error("CORS policy violation"), false);
     },
     credentials: true,
-  }),
+  })
 );
 
 // Middleware
@@ -45,21 +45,19 @@ app.use("/api/category", categoryRoute);
 app.use("/api/contact", contactRoute);
 
 // Base routes
-app.get("/", (req, res) => {
+app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Wouessi Back Office");
 });
 
-app.get("/data", (req, res) => {
+app.get("/data", (req: Request, res: Response) => {
   res.json({ message: "Hello from the server!" });
 });
 
 // Initialize the application
 const initializeApp = async () => {
   try {
-    // Connect to the database
-    await connectToDB(process.env.MONGODB_NAME);
+    await connectToDB(process.env.MONGODB_NAME!);
 
-    // Start the server after successful database connection
     const port = process.env.PORT || 5000;
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
@@ -73,4 +71,4 @@ const initializeApp = async () => {
 // Start the application
 initializeApp();
 
-module.exports = app; // Export for testing purposes
+export default app; // Export for testing purposes
