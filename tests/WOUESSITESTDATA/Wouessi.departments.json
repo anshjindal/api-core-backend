@@ -1,0 +1,38 @@
+[{
+  "_id": {
+    "$oid": "67cb13e0d621764fbf10b0a1"
+  },
+  "departmentId": "DEPT001",
+  "departmentName": "Information Technology",
+  "departmentAcronym": "IT",
+  "description": "Handles all IT infrastructure and development",
+  "deptHead": "EMPLOYEE00001",
+  "status": "active",
+  "logId": "EMPLOYEE00001",
+  "createdAt": {
+    "$date": "2025-03-07T15:42:24.292Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-07T15:42:24.292Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67cb1411d621764fbf10b0a5"
+  },
+  "departmentId": "DEPT002",
+  "departmentName": "Marketing",
+  "departmentAcronym": "MRKTNG",
+  "description": "Handles all marketing  and development",
+  "deptHead": "EMPLOYEE00001",
+  "status": "active",
+  "logId": "EMPLOYEE00001",
+  "createdAt": {
+    "$date": "2025-03-07T15:43:13.715Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-07T15:43:13.715Z"
+  },
+  "__v": 0
+}]

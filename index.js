@@ -22,6 +22,8 @@ const connectToDB = require("./utils/database");
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const leavesRoutes = require("./routes/leaves");
+const { runTests } = require("./tests/test-basic-DataSetup");
 
 const app = express();
 
@@ -51,12 +53,15 @@ app.use("/api/offboarding", offboardingRoutes);
 const dbName = "Wouessi";
 
 connectToDB(dbName)
-  .then(() => {
-    console.log(`Successfully connected to the database: ${dbName}`);
+  .then(async () => {
+    console.log(`✅ Successfully connected to the database: ${dbName}`);
+
+    // Run test data setup at startup
+    await runTests();
   })
   .catch((error) => {
-    console.error("Error connecting to the database", error);
-    process.exit(1);
+    console.error("❌ Error connecting to the database", error);
+    process.exit(1); // Exit the process if the connection fails
   });
 
 // Default Routes
