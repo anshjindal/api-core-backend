@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Employee = require("../models/employee");
+const Employee = require("../models/Employee");
 const Address = require("../models/address");
 const { generateEmpId, generatePassword, hashPassword, } = require("../helpers/employeeHelper");
 const { uploadFile } = require("../middlewares/fileStorageMiddlware");
@@ -227,4 +227,25 @@ const getDesignationTitle = async (designationId) => {
   return designation ? designation.title : null;
 };
 
-module.exports = { getDepartmentName, getDesignationTitle,getEmployeeById,createEmployee,getAllEmployees,updateEmployee};
+// Method to clearly assign offboarding process (without using transactions locally)
+const assignOffboardingProcess = async (empId, offboardingProcessId) => {
+  try {
+    const updatedEmployee = await Employee.findOneAndUpdate(
+      { empId },
+      { $set: { offboardingProcessId } },
+      { new: true }
+    );
+
+    if (!updatedEmployee) {
+      throw new Error("Employee not found");
+    }
+
+    return updatedEmployee;
+  } catch (error) {
+    console.error("Offboarding assignment error:", error.message);
+    throw new Error("Failed to assign offboarding process");
+  }
+};
+
+module.exports = { getDepartmentName, getDesignationTitle,getEmployeeById,createEmployee,getAllEmployees,updateEmployee,
+  assignOffboardingProcess};

@@ -1,10 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const RolesController = require("../controllers/rolesController");
-const verifySession = require("../middlewares/authenticationMiddleware");
+const { verifyToken } = require("../middlewares/authenticationMiddleware");
 
-
-router.post("/roleAdd", verifySession, RolesController.addRole);
-router.get("/getRoles", verifySession,RolesController.getAllRoles);
+router.post("/roleAdd", verifyToken, RolesController.addRole);
+router.get("/getRoles", verifyToken, RolesController.getAllRoles);
 
 module.exports = router;

@@ -1,10 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const DepartmentController = require("../controllers/departmentController");
-const verifySession = require("../middlewares/authenticationMiddleware");
+const { verifyToken } = require("../middlewares/authenticationMiddleware"); 
 
-
-router.post("/deptAdd", verifySession, DepartmentController.addDepartment);
-router.get("/getDepartments", verifySession,DepartmentController.getAllDepartments);
+router.post("/deptAdd", verifyToken, DepartmentController.addDepartment);
+router.get("/getDepartments", verifyToken, DepartmentController.getAllDepartments);
 
 module.exports = router;

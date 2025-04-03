@@ -58,7 +58,7 @@ const EmployeeSchema = mongoose.Schema({
   },
   gender: {
     type: String,
-    required: [true, "Geneder is required"],
+    required: [true, "Gender is required"],
   },
   password: {
     type: String,
@@ -191,24 +191,31 @@ const EmployeeSchema = mongoose.Schema({
   repManagerRef: {
     type: String,
     required: true,
-    
   },
-  healthCardNo:{
+  healthCardNo: {
     type: String,
     default: ""
   },
-  familyPractitionerName :{
-    type : String,
+  familyPractitionerName: {
+    type: String,
     default: ""
   },
-  practitionerClinicName : {
-    type : String,
-    defautlt: ""
-  },
-  practitionerName : {
-    type : String,
+  practitionerClinicName: {
+    type: String,
     default: ""
   },
+  practitionerName: {
+    type: String,
+    default: ""
+  },
+
+  // 👇 ADDED NEW FIELD HERE FOR OFFBOARDING PROCESS
+  offboardingProcessId: {
+    type: String,
+    default: null,
+    trim: true
+  },
+
   createdAt: {
     type: Date,
     default: Date.now,
@@ -223,4 +230,5 @@ const EmployeeSchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Employee", EmployeeSchema,"employees");
+module.exports = mongoose.models.Employee || mongoose.model("Employee", EmployeeSchema, "employees");
+

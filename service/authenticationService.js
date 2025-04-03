@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const redisClient = require("../utils/redisConfig");
-const Employee = require("../models/employee.js");
+const Employee = require("../models/Employee.js");
 const { generateAccessToken, createRefreshToken } = require("../utils/jwtUtility"); 
 const { v4: uuidv4 } = require("uuid");
 const useragent = require("useragent");
