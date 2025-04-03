@@ -1,5 +1,5 @@
 // models/Newsletter.js
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const newsletterSchema = new mongoose.Schema({
   email: {
