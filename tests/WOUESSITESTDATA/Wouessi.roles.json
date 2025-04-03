@@ -1,0 +1,42 @@
+[{
+  "_id": {
+    "$oid": "67cb1b6fdccbd1c10785a66e"
+  },
+  "roleName": "Project Manager",
+  "description": "Responsible for overseeing project execution and team coordination.",
+  "permissions": [
+    "create",
+    "read",
+    "update"
+  ],
+  "status": "active",
+  "logId": "EMPLOYEE00001",
+  "createdAt": {
+    "$date": "2025-03-07T16:14:39.472Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-07T16:14:39.472Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67cb1ba3dccbd1c10785a671"
+  },
+  "roleName": "Developer",
+  "description": "Responsible for overseeing development tasks and  team coordination.",
+  "permissions": [
+    "create",
+    "read",
+    "update"
+  ],
+  "status": "active",
+  "logId": "EMPLOYEE00001",
+  "createdAt": {
+    "$date": "2025-03-07T16:15:31.737Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-07T16:15:31.737Z"
+  },
+  "__v": 0
+}]
