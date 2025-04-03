@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const { verifyToken } = require("../middlewares/authenticationMiddleware");
+const { authenticate, authorize } = require("../middlewares/authenticationMiddleware");
+const offboardingController = require('../controllers/offboardingController');
 
 // POST endpoint to assign offboarding process
 router.post('/assign-process', verifyToken, async (req, res) => {
@@ -22,5 +24,13 @@ router.post('/assign-process', verifyToken, async (req, res) => {
         res.status(500).json({ success: false, message: 'Internal server error.' });
     }
 });
+
+// DELETE endpoint to delete an offboarding process
+router.delete(
+    '/delete/:id',
+    authenticate,
+    authorize('HR', 'ADMIN'),
+    offboardingController.deleteOffboardingProcess
+);
 
 module.exports = router;
