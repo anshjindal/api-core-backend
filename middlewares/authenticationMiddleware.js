@@ -3,7 +3,7 @@ const redisClient = require("../utils/redisConfig");
 const Employee = require('../models/Employee'); // ✅ Fixed casing here
 
 // Middleware to verify JWT Token and Redis session
-exports.verifyToken = async (req, res, next) => {
+const verifyToken = async (req, res, next) => {
   const token = req.cookies.accessToken;
   
   if (!token) {
@@ -122,6 +122,9 @@ const authorize = (...allowedRoles) => {
 };
 
 module.exports = {
+    verifyToken,  // Add this line
     authenticate,
-    authorize
-};
+    authorize,
+    authorizeRoles
+  };
+  

@@ -2,7 +2,7 @@ const OffboardingProcess = require('../models/OffboardingProcess');
 const { validationResult } = require('express-validator');
 
 
-exports.createOffboardingProcess = async (req, res) => {
+const createOffboardingProcess = async (req, res) => {
     try {
         // Check for validation errors
         const errors = validationResult(req);
@@ -50,7 +50,7 @@ exports.createOffboardingProcess = async (req, res) => {
     }
 };
 
-exports.deleteOffboardingProcess = async (req, res) => {
+const deleteOffboardingProcess = async (req, res) => {
     try {
 
         // Get the process ID from request parameters
@@ -81,4 +81,10 @@ exports.deleteOffboardingProcess = async (req, res) => {
             error: error.message
         });
     }
+};
+
+//export
+module.exports = {
+    createOffboardingProcess,
+    deleteOffboardingProcess
 };

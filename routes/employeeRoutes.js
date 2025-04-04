@@ -3,6 +3,13 @@ const router = express.Router();
 const EmployeeController = require("../controllers/employeeController");
 const authMiddleware = require("../middlewares/authenticationMiddleware"); 
 const upload = require("../middlewares/fileStorageMiddlware");
+const {
+  verifyToken,
+  authenticate,
+  authorize,
+  authorizeRoles
+
+} = require("../middlewares/authenticationMiddleware");
 
 // Employee creation route
 router.post("/empAdd", authMiddleware.verifyToken, EmployeeController.addEmployee);

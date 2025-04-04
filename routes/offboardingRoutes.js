@@ -3,9 +3,11 @@ const router = express.Router();
 const User = require('../models/User');
 const { verifyToken } = require("../middlewares/authenticationMiddleware");
 const { authenticate, authorize } = require("../middlewares/authenticationMiddleware");
-const offboardingController = require('../controllers/offboardingController');
+const {
+    createOffboardingProcess,
+    deleteOffboardingProcess
+} = require('../controllers/offboardingController');
 const { body } = require('express-validator'); 
-const { authenticate, authorize } = require('../middlewares/authenticationMiddleware');
 
 router.post(
     '/create', 
@@ -44,7 +46,7 @@ router.post(
                 return true;
             })
     ],
-    offboardingController.createOffboardingProcess
+    createOffboardingProcess
 );
 
 module.exports = router;
@@ -53,7 +55,7 @@ router.delete(
     '/delete/:id',
     authenticate,
     authorize('HR', 'ADMIN'),
-    offboardingController.deleteOffboardingProcess
+    deleteOffboardingProcess
 );
 
 module.exports = router;
