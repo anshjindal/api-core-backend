@@ -49,7 +49,6 @@ router.post(
     createOffboardingProcess
 );
 
-module.exports = router;
 // DELETE endpoint to delete an offboarding process
 router.delete(
     '/delete/:id',
