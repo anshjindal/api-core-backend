@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const leavesController = require("../controllers/leavesController");
-const verifySession = require("../middlewares/authenticationMiddleware");
+const { verifyToken } = require("../middlewares/authenticationMiddleware");
 
-router.post("/:empId", verifySession, leavesController.saveLeave);
-router.put("/:leaveId", verifySession, leavesController.updateLeave);
-router.get("/:empId", verifySession, leavesController.getAllLeaves);
+router.post("/:empId", verifyToken, leavesController.saveLeave);
+router.put("/:leaveId", verifyToken, leavesController.updateLeave);
+router.get("/:empId", verifyToken, leavesController.getAllLeaves);
 
 module.exports = router;

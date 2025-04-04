@@ -3,34 +3,58 @@ const router = express.Router();
 const User = require('../models/User');
 const { verifyToken } = require("../middlewares/authenticationMiddleware");
 const { authenticate, authorize } = require("../middlewares/authenticationMiddleware");
-const offboardingController = require('../controllers/offboardingController');
+const {
+    createOffboardingProcess,
+    deleteOffboardingProcess
+} = require('../controllers/offboardingController');
+const { body } = require('express-validator'); 
 
-// POST endpoint to assign offboarding process
-router.post('/assign-process', verifyToken, async (req, res) => {
-    const { userId, processId } = req.body;
-
-    try {
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found.' });
-        }
-
-        user.offboardingProcessId = processId;
-        await user.save();
-
-        res.status(200).json({ success: true, message: 'Process assigned successfully.' });
-    } catch (error) {
-        console.error('Error assigning process:', error);
-        res.status(500).json({ success: false, message: 'Internal server error.' });
-    }
-});
+router.post(
+    '/create', 
+    authenticate,
+    authorize('HR', 'ADMIN'),
+    [
+        // Validation middleware
+        body('title')
+            .notEmpty()
+            .withMessage('Title is required')
+            .isLength({ min: 3, max: 100 })
+            .withMessage('Title must be between 3 and 100 characters'),
+        
+        body('description')
+            .notEmpty()
+            .withMessage('Description is required')
+            .isLength({ min: 10, max: 500 })
+            .withMessage('Description must be between 10 and 500 characters'),
+        
+        body('emailRecipient')
+            .isEmail()
+            .withMessage('Invalid email address'),
+        
+        body('checklist')
+            .isArray()
+            .withMessage('Checklist must be an array')
+            .custom((checklist) => {
+                if (checklist.length === 0) {
+                    throw new Error('Checklist cannot be empty');
+                }
+                checklist.forEach(item => {
+                    if (!item.task) {
+                        throw new Error('Each checklist item must have a task');
+                    }
+                });
+                return true;
+            })
+    ],
+    createOffboardingProcess
+);
 
 // DELETE endpoint to delete an offboarding process
 router.delete(
     '/delete/:id',
     authenticate,
     authorize('HR', 'ADMIN'),
-    offboardingController.deleteOffboardingProcess
+    deleteOffboardingProcess
 );
 
 module.exports = router;
