@@ -20,10 +20,10 @@ exports.uploadFile = async (file, destinationPath) => {
       const filePath = path.join(destinationPath, `${file.fieldname}${fileExt}`);
 
 
-      // **Write file from memory buffer to disk**
+      // Write file from memory buffer to disk**
       fs.writeFile(filePath, file.buffer, (err) => {
         if (err) return reject(err);
-        resolve(filePath); // ✅ Return saved file path
+        resolve(filePath);
       });
     } catch (error) {
       reject(error);
