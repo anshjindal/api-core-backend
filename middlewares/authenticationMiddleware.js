@@ -3,7 +3,6 @@ const redisClient = require("../utils/redisConfig");
 
 const verifySession = async (req, res, next) => {
   const token = req.cookies.accessToken;
-  console.log(token);
   if (!token) return res.status(401).json({ message: "Access Denied" });
 
   try {
