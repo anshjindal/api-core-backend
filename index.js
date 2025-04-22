@@ -27,6 +27,7 @@ const leavesRoutes = require("./routes/leaves");
 app.use(
   cors({
     origin: [
+      "http://localhost:3000",
       process.env.WOUESSI_FRONTEND_URL,
       "https://dev.wouessi.com/en",
       "https://dev.wouessi.com",
