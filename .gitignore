@@ -2,3 +2,7 @@
 .env
 config.env
 .idea
+
+# Ignore MongoDB data directory
+data/
+
