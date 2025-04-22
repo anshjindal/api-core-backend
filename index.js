@@ -35,7 +35,7 @@ app.use(
       "https://www.wouessi.com",
       "https://www.wouessi.ca/en/",
       "https://www.wouessi.ca",
-    ], // Dynamically set the allowed CORS origin
+    ], // Dynamically set the allowed CORS origin.
     credentials: true,
   })
 );
