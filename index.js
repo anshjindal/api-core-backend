@@ -1,15 +1,15 @@
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
 const newsletterRoute = require("./routes/newsletterRoutes");
 const blogRoute = require("./routes/blog");
 const contactRoute = require("./routes/contact");
 const employeeRoutes = require("./routes/employeeRoutes");
-const departmentRoutes=require("./routes/departmentRoutes")
-const designationRoutes=require("./routes/designationRoutes")
+const departmentRoutes = require("./routes/departmentRoutes");
+const designationRoutes = require("./routes/designationRoutes");
 
 const authRoutes = require("./routes/authenticationRoutes");
-const roleRoutes=require("./routes/roleRoutes");
+const roleRoutes = require("./routes/roleRoutes");
 
 const multer = require("multer");
 
@@ -56,9 +56,9 @@ app.use("/api/auth", authRoutes);
 
 // Employee Routes
 app.use("/api/employee", employeeRoutes);
-app.use("/api/department",departmentRoutes);
-app.use("/api/role",roleRoutes);
-app.use("/api/designation",designationRoutes);
+app.use("/api/department", departmentRoutes);
+app.use("/api/role", roleRoutes);
+app.use("/api/designation", designationRoutes);
 app.use("/api/leaves", leavesRoutes);
 
 const dbName = "Wouessi";
