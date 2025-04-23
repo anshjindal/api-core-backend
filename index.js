@@ -29,6 +29,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       process.env.WOUESSI_FRONTEND_URL,
+      "https://dev.ems.wouessi.com",
       "https://dev.wouessi.com/en",
       "https://dev.wouessi.com",
       "https://www.wouessi.com/en",
