@@ -1,0 +1,95 @@
+pipeline {
+    agent any
+    
+    environment {
+        IMAGE_NAME = "smehra999/ems209_backend"  // Image name
+        DOCKER_REGISTRY = "docker.io"  // Docker registry URL (default Docker Hub)
+    }
+    
+    stages {
+        // Stage to verify NPM (optional)
+        stage('Verify NPM') {
+            steps {
+                bat 'npm -v'
+            }
+        }
+        
+        // Stage to checkout the backend repository
+        stage('Checkout') {
+            steps {
+                dir('backend') {
+                   git credentialsId: 'Github', url: 'https://github.com/adii3/backend_feat_ems_qc_209.git', branch: 'main'
+                }
+            }
+        }
+
+        // Stage to build the backend
+        stage('Build Backend and Test') {
+            steps {
+                dir('backend') {
+                    bat 'npm install || exit 0'
+                }
+            }
+        }
+
+        // Stage to build the Docker image for backend
+        stage('Build Docker Image for Backend') {
+            steps {
+                dir('backend') {
+                    script {
+                        env.TAG = env.BUILD_ID
+                        echo "Building Docker image for backend"
+                        bat 'docker build -t ems209_backend:latest -f cicd_team_ems209/dockerfile .' 
+                    }
+                }
+            }
+        }
+
+        // Stage to push Docker image for backend
+        stage('Push Docker Image for Backend') {
+            steps {
+                script {
+                    // Docker login using Jenkins credentials store
+                        withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        echo "Logging in to Docker Hub"
+                        bat "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ${DOCKER_REGISTRY}"
+                    }
+
+                    // Tagging the backend image with build ID and latest
+                    bat "docker tag ems209_backend:latest ${IMAGE_NAME}:${TAG}"
+                    bat "docker tag ems209_backend:latest ${IMAGE_NAME}:latest"
+
+                    // Pushing the backend image to Docker Hub
+                    bat "docker push ${IMAGE_NAME}:${TAG}"
+                    bat "docker push ${IMAGE_NAME}:latest"
+                }   
+            }
+        }
+        
+        stage('Deploy Backend to Kubernetes') {
+            steps {
+                script {
+                    withEnv(["KUBECONFIG=C:\\Users\\smehr\\.kube\\config"]) {
+                        dir('backend') {
+                            
+                            // Create namespace if it does not exist
+                            bat "kubectl get namespace team-ems209 || kubectl create namespace team-ems209"
+
+                            // Apply Kubernetes manifests
+                            bat "kubectl apply -f cicd_team_ems209\\k8s\\ --namespace=team-ems209"
+                            
+                            // Check if the deployment exists before setting the image
+                            bat "kubectl rollout status deployment/backend-deployment --namespace=team-ems209 || exit 0"
+
+                            // Update Kubernetes deployment with the new backend image
+                            bat "kubectl set image deployment/backend-deployment backend=${IMAGE_NAME}:${TAG} --namespace=team-ems209"
+                            
+                            // Verify deployment status
+                            bat "kubectl get pods --namespace=team-ems209"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
