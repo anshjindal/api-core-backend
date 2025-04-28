@@ -1,6 +1,5 @@
 const path = require("path");
 const express = require("express");
-const cors = require("cors");
 const bodyParser = require("body-parser");
 const newsletterRoute = require("./routes/newsletterRoutes");
 const blogRoute = require("./routes/blog");
@@ -24,19 +23,36 @@ const morgan = require("morgan");
 const leavesRoutes = require("./routes/leaves");
 const jobInfoRoutes = require("./routes/jobInfoRoutes");
 
-// Use CORS middleware to allow requests from your frontend
-app.use(
-  cors({
-    origin: [
-      process.env.WOUESSI_FRONTEND_URL,
-      "https://www.wouessi.com/en",
-      "https://www.wouessi.com",
-      "https://www.wouessi.ca/en/",
-      "https://www.wouessi.ca",
-    ], // Dynamically set the allowed CORS origin.
-    credentials: true,
-  })
-);
+const allowedOrigins = [
+  process.env.WOUESSI_FRONTEND_URL,
+  "http://localhost:3000",
+  "https://www.wouessi.com/en",
+  "https://www.wouessi.com",
+  "https://www.wouessi.ca/en/",
+  "https://www.wouessi.ca",
+];
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+
+  if (req.method === "OPTIONS") {
+    res.sendStatus(200); // Allow preflight requests
+  } else {
+    next();
+  }
+});
 
 // Middleware
 app.use(express.json());
