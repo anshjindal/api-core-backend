@@ -28,16 +28,18 @@ app.use(
   cors({
     origin: [
       process.env.WOUESSI_FRONTEND_URL,
+      "https://dev.wouessi.com/en",
+      "https://dev.wouessi.com",
       "https://www.wouessi.com/en",
       "https://www.wouessi.com",
       "https://www.wouessi.ca/en/",
       "https://www.wouessi.ca",
-    ], // Dynamically set the allowed CORS origin.
+    ], // Dynamically set the allowed CORS origin
     credentials: true,
   })
 );
 
-// Middleware
+// Body parsing middleware
 app.use(express.json());
 
 // Add the newsletter route
@@ -51,8 +53,6 @@ app.use(cookieParser());
 
 // Routes
 app.use("/api/auth", authRoutes);
-
-// Employee Routes
 app.use("/api/employee", employeeRoutes);
 app.use("/api/department", departmentRoutes);
 app.use("/api/role", roleRoutes);
@@ -67,7 +67,7 @@ connectToDB(dbName)
   })
   .catch((error) => {
     console.error("Error connecting to the database", error);
-    process.exit(1); // Exit the process if the connection fails
+    process.exit(1);
   });
 
 // Define your routes
@@ -80,7 +80,7 @@ app.get("/data", (req, res) => {
 });
 
 // Start the server
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
