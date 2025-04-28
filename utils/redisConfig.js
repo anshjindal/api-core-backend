@@ -1,18 +1,19 @@
-const Redis = require('ioredis');
+const Redis = require("ioredis");
 
-const redis = new Redis({
-  host: process.env.REDIS_HOST || '127.0.0.1',
-  port: process.env.REDIS_PORT || 6379,
-  password: process.env.REDIS_PASSWORD || '',
-  tls: process.env.REDIS_HOST && process.env.REDIS_HOST !== '127.0.0.1' ? {} : null,
-  retryStrategy: (times) => Math.min(times * 50, 2000),
-  maxRetriesPerRequest: 20,
-  enableAutoPipelining: true,
-  connectTimeout: 15000,
-  keepAlive: 30000,
+// ioredis uses "new Redis()" instead of "createClient"
+const redisClient = new Redis({
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT,
+  password: process.env.REDIS_PASSWORD, // Optional, only if your Redis has password
+  // tls: {} // Uncomment if your Redis requires SSL
 });
 
-redis.on('connect', () => console.log('Connected to Redis'));
-redis.on('error', (err) => console.error('Redis error:', err));
+// Optional: Listen to events
+redisClient.on("connect", () => console.log("Connected to Redis..."));
+redisClient.on("error", (err) =>
+  console.error("Redis Connection Failed:", err)
+);
 
-module.exports = redis;
+// No need to call connect manually; ioredis auto-connects.
+
+module.exports = redisClient;

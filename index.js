@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -7,11 +8,10 @@ const contactRoute = require("./routes/contact");
 const employeeRoutes = require("./routes/employeeRoutes");
 const departmentRoutes = require("./routes/departmentRoutes");
 const designationRoutes = require("./routes/designationRoutes");
+const employmentStatusRoutes = require("./routes/employmentStatusRoutes");
 
 const authRoutes = require("./routes/authenticationRoutes");
 const roleRoutes = require("./routes/roleRoutes");
-
-const multer = require("multer");
 
 require("dotenv").config({ path: "./.env" });
 
@@ -22,6 +22,7 @@ const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const leavesRoutes = require("./routes/leaves");
+const jobInfoRoutes = require("./routes/jobInfoRoutes");
 
 // Use CORS middleware to allow requests from your frontend
 app.use(
@@ -39,6 +40,11 @@ app.use(
 
 // Middleware
 app.use(express.json());
+const errorHandler = require("./middlewares/errorHandler");
+
+// Serve files in the uploads folder as static content
+const uploadDirectory = path.join(__dirname, "uploads");
+app.use("/uploads", express.static(uploadDirectory));
 
 // Add the newsletter route
 app.use("/api/newsletter", newsletterRoute);
@@ -58,6 +64,8 @@ app.use("/api/department", departmentRoutes);
 app.use("/api/role", roleRoutes);
 app.use("/api/designation", designationRoutes);
 app.use("/api/leaves", leavesRoutes);
+app.use("/api/job-info", jobInfoRoutes);
+app.use("/api/employment-status", employmentStatusRoutes);
 
 const dbName = "Wouessi";
 
