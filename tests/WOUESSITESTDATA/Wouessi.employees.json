@@ -1,0 +1,198 @@
+[{
+  "_id": {
+    "$oid": "67b3ec7153bbea09b5c219fd"
+  },
+  "empId": "EMPLOYEE00001",
+  "firstName": "Michael",
+  "middleName": "smith",
+  "lastName": "kumar",
+  "email": "michaelsmith@example.com",
+  "workMail": "michaelsmith@company.com",
+  "contactNumber": "+1987654321",
+  "dateOfBirth": {
+    "$date": "1985-08-23T00:00:00.000Z"
+  },
+  "gender": "Male",
+  "password": "$2b$12$pOilMCSA/hIivykUSqno8.o7TFGC3muJ4ywXwvsCqHSi0dAf63prq",
+  "addresses": [
+    {
+      "$oid": "67b3ec7153bbea09b5c219ff"
+    },
+    {
+      "$oid": "67b3ec7153bbea09b5c21a00"
+    }
+  ],
+  "bloodGroup": "A-",
+  "dateOfJoin": {
+    "$date": "2024-03-10T00:00:00.000Z"
+  },
+  "imageFolder": null,
+  "dateOfExit": null,
+  "designations": "DESGN001",
+  "roleRef": {
+    "$oid": "67cb1ba3dccbd1c10785a671"
+  },
+  "departmentId": "DEPT001",
+  "employmentType": "Part-Time",
+  "workLocation": "On-Site",
+  "status": "active",
+  "accountNumber": "987654321",
+  "transitNumber": "87654",
+  "institutionNumber": "456",
+  "bankName": "Wells Fargo",
+  "interacId": "michaelsmith@bank.com",
+  "sin": "234-567-890",
+  "taxCode": "TX5678",
+  "workPermitDetails": "Not Required",
+  "prDetails": "PR67890",
+  "citizenshipId": "CIT789012",
+  "maritalStatus": "Married",
+  "emergencyContactName": "Sarah Johnson",
+  "emergencyContactNumber": "9988776655",
+  "emergencyContactRelation": "Wife",
+  "repManagerRef": "65b5f98e8d6a4d3e4aed9876",
+  "healthCardNo": "HC567890",
+  "familyPractitionerName": "Dr. Emily Brown",
+  "practitionerClinicName": "Sunrise Medical Center",
+  "practitionerName": "Dr. Robert ",
+  "logId": "LOG54784",
+  "createdAt": {
+    "$date": "2025-02-18T02:12:01.272Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-18T02:12:01.272Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "67c9d2715b1b52ab9c1f35ad"
+  },
+  "empId": "EMPLOYEE00002",
+  "firstName": "Rohan sai sharma",
+  "middleName": "Kumar",
+  "lastName": "Sharma",
+  "email": "rohansharma@company.com",
+  "workMail": "rohan.sharma@company.com",
+  "contactNumber": "+17893466735",
+  "dateOfBirth": {
+    "$date": "1992-08-29T00:00:00.000Z"
+  },
+  "gender": "Male",
+  "password": "$2a$10$pr0n2fxdTPCWbNPrOjvyzO0iuR3kEN.bRuTVsgRvXCZlNHgKm0ZiG",
+  "addresses": [
+    {
+      "$oid": "67ca17a8c9848842242afd47"
+    },
+    {
+      "$oid": "67ca17a8c9848842242afd49"
+    }
+  ],
+  "bloodGroup": "B+",
+  "dateOfJoin": {
+    "$date": "2024-03-10T00:00:00.000Z"
+  },
+  "imageFolder": "\\Wouessi\\Employees\\EMPLOYEE00002",
+  "dateOfExit": null,
+  "designations": "DESH456",
+  "roleRef": {
+    "$oid": "65b3f34e7c4a3d3b2aeb5678"
+  },
+  "departmentId": "DEPT102",
+  "employmentType": "Full-Time",
+  "workLocation": "canada",
+  "status": "active",
+  "accountNumber": "789652326",
+  "transitNumber": "23450",
+  "institutionNumber": "454",
+  "bankName": "State Bank of India",
+  "interacId": "rohan.sharma@bank.com",
+  "sin": "997-654-333",
+  "taxCode": "TX5678",
+  "workPermitDetails": "WRK674",
+  "prDetails": "PR56783",
+  "citizenshipId": "CIT6789551",
+  "maritalStatus": "Married",
+  "emergencyContactName": "Sharma",
+  "emergencyContactNumber": "9876543210",
+  "emergencyContactRelation": "Wife",
+  "repManagerRef": "65b3f34e7c4a3d3b2aeb9101",
+  "healthCardNo": "HC567890",
+  "familyPractitionerName": "Dr. Anil Mehta",
+  "practitionerClinicName": "Apollo general",
+  "practitionerName": "Dr. Anil Mehta",
+  "logId": "LOG987654",
+  "createdAt": {
+    "$date": "2025-03-06T16:50:57.916Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-06T16:50:57.916Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "67ca377d31fea95e374c1654"
+  },
+  "empId": "EMPLOYEE00003",
+  "firstName": "Mani",
+  "middleName": "Krishna",
+  "lastName": "Katteboyeina",
+  "email": "manikrishnakb@gmail.com",
+  "workMail": "mani.krishan@company.com",
+  "contactNumber": "+15789345268",
+  "dateOfBirth": {
+    "$date": "1992-08-25T00:00:00.000Z"
+  },
+  "gender": "Male",
+  "password": "$2a$10$aPltwSqeWiN990pwqjTHSOcmGAMeYkWakhH6BUtsrBSk5ifyWhvcm",
+  "addresses": [
+    {
+      "$oid": "67ca377d31fea95e374c1656"
+    },
+    {
+      "$oid": "67ca377d31fea95e374c1657"
+    }
+  ],
+  "bloodGroup": "B+",
+  "dateOfJoin": {
+    "$date": "2024-03-12T00:00:00.000Z"
+  },
+  "imageFolder": "\\Wouessi\\Employees\\EMPLOYEE00003",
+  "dateOfExit": null,
+  "designations": "DESGN001",
+  "roleRef": {
+    "$oid": "67cb1b6fdccbd1c10785a66e"
+  },
+  "departmentId": "DEPT002",
+  "employmentType": "Full-Time",
+  "workLocation": "Toronto",
+  "status": "active",
+  "accountNumber": "785787456",
+  "transitNumber": "29876",
+  "institutionNumber": "460",
+  "bankName": "Royal Bank",
+  "interacId": "mani.krishna@gmail.com",
+  "sin": "997-654-366",
+  "taxCode": "TX5672",
+  "workPermitDetails": "WRK671",
+  "prDetails": "PR56784",
+  "citizenshipId": "CIT6789581",
+  "maritalStatus": "Married",
+  "emergencyContactName": "siva",
+  "emergencyContactNumber": "4378387567",
+  "emergencyContactRelation": "friend",
+  "repManagerRef": "65b3f34e7c4a3d3b2aeb9101",
+  "healthCardNo": "HC567892",
+  "familyPractitionerName": "Dr. Anil Mehta",
+  "practitionerClinicName": "Apollo Clinic",
+  "practitionerName": "Dr. Anil Mehta",
+  "logId": "LOG987654",
+  "createdAt": {
+    "$date": "2025-03-07T00:02:05.748Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-07T00:02:05.748Z"
+  },
+  "__v": 1
+}]

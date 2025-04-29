@@ -1,7 +1,6 @@
 const RoleService = require("../service/roleService");
-  
 
-exports.addRole = async (req, res) => {
+const addRole = async (req, res) => {
     try {  
       const response = await RoleService.createRole(req.body);
       return res.status(201).json(response);
@@ -11,7 +10,7 @@ exports.addRole = async (req, res) => {
     }
 };
 
-exports.getAllRoles = async (req, res) => {
+const getAllRoles = async (req, res) => {
     try {
       const roles = await RoleService.fetchRoles();
       return res.status(200).json(roles);
@@ -19,4 +18,9 @@ exports.getAllRoles = async (req, res) => {
       console.error("Error Fetching roles:", error.message);
       return res.status(500).json({ error: "Fetching roles failed: " + error.message });
     }
+};
+
+module.exports = {
+    addRole,
+    getAllRoles
 };
