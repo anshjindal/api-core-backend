@@ -1,19 +1,18 @@
-const { verifiedToken } = require("../utils/jwtUtility");
-const redisClient = require("../utils/redisConfig");
+const jwt = require("jsonwebtoken");
 
 const verifySession = async (req, res, next) => {
   const token = req.cookies.accessToken;
   if (!token) return res.status(401).json({ message: "Access Denied" });
 
   try {
-    const decoded = verifiedToken(token, process.env.JWT_SECRET_KEY);
-   
-
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     req.user = decoded;
 
     const sessions = await redisClient.keys(`session:${decoded.empId}:*`);
     if (sessions.length === 0) {
-      return res.status(401).json({ message: "Session Expired. Please login again." });
+      return res
+        .status(401)
+        .json({ message: "Session Expired. Please login again." });
     }
 
     next();

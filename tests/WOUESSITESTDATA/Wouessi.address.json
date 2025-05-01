@@ -1,0 +1,90 @@
+[{
+  "_id": {
+    "$oid": "67b3ec7153bbea09b5c219ff"
+  },
+  "empId": "EMPLOYEE00001",
+  "type": "permanent",
+  "status": "active",
+  "houseNo": "789",
+  "street": "Broadway",
+  "city": "Chicago downtown",
+  "province": "IL",
+  "country": "canada",
+  "pincode": "60601",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67b3ec7153bbea09b5c21a00"
+  },
+  "empId": "EMPLOYEE00001",
+  "type": "temporary",
+  "status": "active",
+  "houseNo": "321",
+  "street": "Market St",
+  "city": "San Francisco ca",
+  "province": "CA",
+  "country": "canada",
+  "pincode": "94105",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67ca17a8c9848842242afd47"
+  },
+  "empId": "EMPLOYEE00002",
+  "type": "permanent",
+  "status": "active",
+  "houseNo": "137",
+  "street": "down king St",
+  "city": "New York",
+  "province": "NYK",
+  "country": "USA",
+  "pincode": "10001",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67ca17a8c9848842242afd49"
+  },
+  "empId": "EMPLOYEE00002",
+  "type": "temporary",
+  "status": "active",
+  "houseNo": "458",
+  "street": "2nd Avenue",
+  "city": "Los Angeles",
+  "province": "CAFN",
+  "country": "USA",
+  "pincode": "90001",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67ca377d31fea95e374c1656"
+  },
+  "empId": "EMPLOYEE00003",
+  "type": "permanent",
+  "status": "active",
+  "houseNo": "123",
+  "street": "Main St",
+  "city": "New York",
+  "province": "NY",
+  "country": "USA",
+  "pincode": "10001",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67ca377d31fea95e374c1657"
+  },
+  "empId": "EMPLOYEE00003",
+  "type": "temporary",
+  "status": "active",
+  "houseNo": "456",
+  "street": "2nd Ave",
+  "city": "Los Angeles",
+  "province": "CA",
+  "country": "USA",
+  "pincode": "90001",
+  "__v": 0
+}]

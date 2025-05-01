@@ -29,6 +29,7 @@ const logoutController = async (req, res) => {
 
         // Deleting the  session from Redis
         await redisClient.del(sessionKey);
+        
 
         //Clearing the  authentication cookies
         res.clearCookie("accessToken");

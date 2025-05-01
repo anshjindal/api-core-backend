@@ -1,0 +1,58 @@
+[
+  {
+    "teamId": "TEAM00001",
+    "teamName": "AI Research",
+    "teamType": "Capstone Student",
+    "members": [
+      {
+        "empId": "EMP001",
+        "role": "Team Lead",
+        "joinDate": "2023-09-15T00:00:00.000Z",
+        "status": "active"
+      },
+      {
+        "empId": "EMP002",
+        "role": "Member",
+        "joinDate": "2023-10-10T00:00:00.000Z",
+        "status": "active"
+      }
+    ],
+    "projectId": "PROJ123",
+    "documents": [
+      {
+        "docName": "Project Proposal",
+        "docType": "PDF",
+        "docUrl": "https://example.com/proposal.pdf",
+        "uploadedAt": "2024-01-05T00:00:00.000Z",
+        "uploadedBy": "EMP001"
+      }
+    ],
+    "status": "active",
+    "createdBy": "EMP001",
+    "updatedBy": "EMP002"
+  },
+  {
+    "teamId": "TEAM00002",
+    "teamName": "Cyber Security",
+    "teamType": "Team Member",
+    "members": [
+      {
+        "empId": "EMP003",
+        "role": "Team Lead",
+        "joinDate": "2023-08-20T00:00:00.000Z",
+        "status": "active"
+      },
+      {
+        "empId": "EMP004",
+        "role": "Member",
+        "joinDate": "2023-09-10T00:00:00.000Z",
+        "status": "active"
+      }
+    ],
+    "projectId": "PROJ456",
+    "documents": [],
+    "status": "active",
+    "createdBy": "EMP003",
+    "updatedBy": "EMP004"
+  }
+]

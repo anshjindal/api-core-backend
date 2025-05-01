@@ -1,7 +1,7 @@
 class employeeResponse {
     constructor(empId, firstName,middleName,lastName, email,workMail,contactNumber,dateOfBirth,
         gender,addresses,bloodGroup,dateOfJoin,imageFolder,dateOfExit,designations,roleRef,departmentId,employmentType,
-        workLocation,status,maritalStatus,emergencyContactName,emergencyContactNumber,emergencyContactRelation,repManagerRef) {
+        workLocation,status,maritalStatus,emergencyContactName,emergencyContactNumber,emergencyContactRelation,repManagerRef,departmentName,designationName) {
       this.empId = empId;
       this.firstName = firstName;
       this.middleName = middleName;
@@ -27,6 +27,8 @@ class employeeResponse {
       this.emergencyContactNumber=emergencyContactNumber;
       this.emergencyContactRelation=emergencyContactRelation;
       this.repManagerRef=repManagerRef;
+      this.departmentName=departmentName;
+      this.designationName=designationName;
     }
   
     static fromEntity(employee) {
@@ -55,7 +57,9 @@ class employeeResponse {
         employee.emergencyContactName,
         employee.emergencyContactNumber,
         employee.emergencyContactRelation,
-        employee.repManagerRef
+        employee.repManagerRef,
+        employee.departmentName,
+        employee.designationName
       );
     }
   }

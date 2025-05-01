@@ -1,0 +1,40 @@
+[{
+  "_id": {
+    "$oid": "67cb2be8cff8d7f961ff8ed7"
+  },
+  "designationId": "DESGN001",
+  "title": "Senior Software Engineer",
+  "departmentId": "DEPT001",
+  "reportsTo": "DESGN003",
+  "gradeLevel": "L3",
+  "salaryRange": "1,00,000 - 1,50,000",
+  "status": "active",
+  "logId": "LOG987654",
+  "createdAt": {
+    "$date": "2025-03-07T17:24:56.679Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-07T17:24:56.679Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67cb2d09f06a49bf502bde28"
+  },
+  "designationId": "DESGN002",
+  "title": "Senior Software Manager",
+  "departmentId": "DEPT001",
+  "reportsTo": "DESGN010",
+  "gradeLevel": "Manager",
+  "salaryRange": "1,80,000 - 2,50,000",
+  "status": "active",
+  "logId": "EMPLOYEE00001",
+  "createdAt": {
+    "$date": "2025-03-07T17:29:45.912Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-07T17:29:45.912Z"
+  },
+  "__v": 0
+}]
