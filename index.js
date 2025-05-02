@@ -55,6 +55,8 @@ app.use(cookieParser());
 
 // Routes
 app.use("/api/auth", authRoutes);
+const emailRoutes = require("./routes/emailRoutes");
+app.use("/api/email", emailRoutes);
 
 // Employee Routes
 app.use("/api/employee", employeeRoutes);
