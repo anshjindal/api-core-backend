@@ -1,31 +1,30 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const newsletterRoute = require("./routes/newsletterRoutes");
-const blogRoute = require("./routes/blog");
-const contactRoute = require("./routes/contact");
-const employeeRoutes = require("./routes/employeeRoutes");
-const departmentRoutes = require("./routes/departmentRoutes")
-const designationRoutes = require("./routes/designationRoutes")
-
-const authRoutes = require("./routes/authenticationRoutes");
-const roleRoutes = require("./routes/roleRoutes");
-
-const certificateRoutes = require("./routes/certificateRoutes");
-
 const multer = require("multer");
+const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
+const morgan = require("morgan");
 
 require("dotenv").config({ path: "./.env" });
 
 const connectToDB = require("./utils/database");
-const app = express();
-//new addon requires
-const cookieParser = require("cookie-parser");
-const helmet = require("helmet");
-const morgan = require("morgan");
-const leavesRoutes = require("./routes/leaves");
 
-// Use CORS middleware to allow requests from your frontend
+const newsletterRoute = require("./routes/newsletterRoutes");
+const blogRoute = require("./routes/blog");
+const contactRoute = require("./routes/contact");
+const employeeRoutes = require("./routes/employeeRoutes");
+const departmentRoutes = require("./routes/departmentRoutes");
+const designationRoutes = require("./routes/designationRoutes");
+const authRoutes = require("./routes/authenticationRoutes");
+const roleRoutes = require("./routes/roleRoutes");
+const leavesRoutes = require("./routes/leaves");
+const emailRoutes = require("./routes/emailRoutes");
+const certificateRoutes = require("./routes/certificates");
+
+const app = express();
+
+// CORS
 app.use(
   cors({
     origin: [
@@ -36,59 +35,44 @@ app.use(
       "https://www.wouessi.com",
       "https://www.wouessi.ca/en/",
       "https://www.wouessi.ca",
-    ], // Dynamically set the allowed CORS origin
+    ],
     credentials: true,
   })
 );
 
 // Middleware
 app.use(express.json());
-
-// Add the newsletter route
-app.use("/api/newsletter", newsletterRoute);
-app.use("/api/blog", blogRoute);
-app.use("/api/contact", contactRoute);
-
-//new
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Routes
+app.use("/api/newsletter", newsletterRoute);
+app.use("/api/blog", blogRoute);
+app.use("/api/contact", contactRoute);
 app.use("/api/auth", authRoutes);
-const emailRoutes = require("./routes/emailRoutes");
 app.use("/api/email", emailRoutes);
-
-// Employee Routes
+app.use("/api/certificates", certificateRoutes);
 app.use("/api/employee", employeeRoutes);
 app.use("/api/department", departmentRoutes);
-app.use("/api/role", roleRoutes);
 app.use("/api/designation", designationRoutes);
+app.use("/api/role", roleRoutes);
 app.use("/api/leaves", leavesRoutes);
 
-app.use("/api", certificateRoutes);
-
+// DB
 const dbName = "Wouessi";
-
 connectToDB(dbName)
   .then(() => {
     console.log(`Successfully connected to the database: ${dbName}`);
   })
   .catch((error) => {
     console.error("Error connecting to the database", error);
-    process.exit(1); // Exit the process if the connection fails
+    process.exit(1);
   });
 
-// Define your routes
-app.get("/", (req, res) => {
-  res.send("Welcome to Wouessi Back Office");
-});
+// Healthcheck
+app.get("/", (req, res) => res.send("Welcome to Wouessi Back Office"));
+app.get("/data", (req, res) => res.json({ message: "Hello from the server!" }));
 
-app.get("/data", (req, res) => {
-  res.json({ message: "Hello from the server!" });
-});
-
-// Start the server
+// Server
 const port = process.env.PORT || 5000;
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+app.listen(port, () => console.log(`Server running on port ${port}`));
