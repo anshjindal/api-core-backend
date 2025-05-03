@@ -5,6 +5,11 @@ const address = require("./address");
 const roles = require("./roles");
 const department = require("./department");
 const designation = require("./designation");
+const certificateSchema = new mongoose.Schema({
+  name: String,
+  sentAt: Date,
+});
+
 
 const EmployeeSchema = mongoose.Schema({
   empId: {
@@ -221,6 +226,12 @@ const EmployeeSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  certificates: [
+    {
+      name: { type: String },
+      sentAt: { type: Date, default: null },
+    },
+  ],
 });
 
 module.exports = mongoose.model("Employee", EmployeeSchema,"employees");
